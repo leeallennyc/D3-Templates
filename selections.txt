@@ -1,0 +1,8 @@
+d3.select('p')
+d3.selectAll('.my-group')
+
+
+selection {
+    _groups: [[ <item selected> ]]
+    _parents: []
+}

@@ -1,0 +1,28 @@
+body {
+    display: flex;
+    background-color: white;
+}
+
+.axis line {
+    stroke: black;
+    fill: yellow;
+}
+
+.axis-grid line {
+    stroke: green;
+}
+
+.axis path {
+    stroke: red;
+}
+
+.axis text {
+    color: gray;
+    font-family: didot;
+    font-size: 0.8rem;
+}
+
+.title {
+    fill: greenyellow;
+    font-size: 1rem;
+}

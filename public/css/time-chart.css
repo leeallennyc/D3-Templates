@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: 'floralwhite';
+}
+
+
+.axis line {
+    stroke: gray;
+    fill: floralwhite;
+}
+
+.axis path {
+    stroke: gray;
+}
+
+.axis text {
+    stroke: gray;
+    font-family: verdana;
+}
+
+.title {
+    font-family: verdana;
+    font-weight: 800;
+    fill: gray;
+}

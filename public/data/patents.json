@@ -1,0 +1,36 @@
+{
+    "countryPatents": [
+        {
+        "country": "United States",
+        "patent": 4879
+      },
+      {
+        "country": "Russia",
+        "patent": 12104
+      },
+      {
+        "country": "France",
+        "patent": 12756
+      },
+      {
+        "country": "Italy",
+        "patent": 6792
+      },
+      {
+        "country": "Germany",
+        "patent": 142984
+      },
+      {
+        "country": "China",
+        "patent": 120536
+      },
+      {
+        "country": "Mexico",
+        "patent": 51118
+      },
+      {
+        "country": "Japan",
+        "patent": 49528
+      }
+    ]
+  }

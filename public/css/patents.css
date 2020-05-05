@@ -1,0 +1,14 @@
+body {
+    background-color: black;
+    padding: 0;
+    margin:0;
+}
+
+.axis line, .axis path {
+    stroke: rgb(185, 183, 183);
+}
+
+.axis text {
+    stroke:rgb(185, 183, 183);;
+    font-family: verdana;
+}

@@ -10,6 +10,7 @@ const pages =  [
     { location: '/basic-line-chart', file: 'basic-line-chart'},
     { location: '/area-chart', file: 'area-chart'},
     { location: '/time-chart', file: 'time-chart'},
+    { location: '/patents', file: 'patents'},
     { location: '/planets', file: 'planets'},
     { location: '/user-updating-bar-chart', file: 'user-updating-bar-chart'}
 ]

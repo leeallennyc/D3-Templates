@@ -1,35 +1,35 @@
 {
     "planetDiameters": [
         {
-        "planet": "Mercury",
+        "planet": "United States",
         "diameter": 4879
       },
       {
-        "planet": "Venus",
+        "planet": "Russia",
         "diameter": 12104
       },
       {
-        "planet": "Earth",
+        "planet": "France",
         "diameter": 12756
       },
       {
-        "planet": "Mars",
+        "planet": "Italy",
         "diameter": 6792
       },
       {
-        "planet": "Jupiter",
+        "planet": "Germany",
         "diameter": 142984
       },
       {
-        "planet": "Saturn",
+        "planet": "China",
         "diameter": 120536
       },
       {
-        "planet": "Uranus",
+        "planet": "Mexico",
         "diameter": 51118
       },
       {
-        "planet": "Neptune",
+        "planet": "Japan",
         "diameter": 49528
       }
     ]

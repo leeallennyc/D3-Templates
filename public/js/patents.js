@@ -84,7 +84,12 @@ d3.json('/data/patents.json').then(data => {
         .transition().duration(3500).delay((d, i) => i * 200)
         .style('opacity', 1) 
 
-        
+    const chartTitle = svg.append('text')
+        .attr('y', -50)
+        .attr('x', width / 2)
+        .style('text-anchor', 'middle')
+        .style('fill', 'lightgray')
+        .text('Patents by Country')
 
 })
 

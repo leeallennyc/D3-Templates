@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.axis line, .axis path {
+    stroke: gray;
+    stroke-width: 1px;
+    font-family: futura;
+    font-size: 1.4em;
+}
+
+.axis text {
+    fill: gray;
+    font-family: futura;
+    font-size: 1.4em;
+}
+
+.patentNumber {
+    fill: floralwhite;
+}

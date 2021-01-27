@@ -1,4 +1,93 @@
 import * as d3 from 'd3'
+import { attrs } from 'd3-selection-multi'
+
+let dim = {
+    'width': '600',
+    'height': '300'
+}
+
+let svg = d3.select('body').append('svg')
+    .style('background', 'floralwhite')
+    .attrs(dim)
+
+
+let data = d3.range(50, 501, 5)
+
+let lineAttrs = {
+    'x1': (d)=>d,
+    'y1': 200,
+    'x2': (d)=>d,
+    'y2': (d, i)=> i%10 == 0 ? 220 : 210,
+    'stroke': 'gray'
+}
+
+let lines = svg.selectAll('line').data(data)
+    .enter().append('line').attrs(lineAttrs)
+
+let slider = svg.append('circle').attrs({
+    'cx': '50',
+    'cy': '200',
+    'r': '20',
+    'fill': 'white',
+    'stroke': 'black',
+    'cursor': 'grab'
+})
+
+function pushLines(){
+    
+}
+
+
+// let c = svg.append('circle').attrs({
+//     'cx': '300',
+//     'cy': '150',
+//     'r': '25',
+//     'fill': 'red'
+// })
+//     .on('click', function(){
+//         d3.select(this).attr('fill', 'orange')
+//     })
+
+// let drag = d3.drag()
+// drag.clickDistance(0)
+
+    
+// drag.on('click', function(){
+//     d3.selection(this).attr('stroke', 'black')
+// })
+
+// drag.on('drag', function(){
+//     let el = d3.select(this)
+//     el.attr('cx', parseInt(el.attr('cx')) + d3.event.dx)
+//     el.attr('cy', parseInt(el.attr('cy')) + d3.event.dy)
+// })
+
+// drag.on('end', function(){
+//     d3.select(this).attr('stroke', 'none')
+// })
+    
+
+// c.call(drag)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -278,9 +367,122 @@ import * as d3 from 'd3'
 // // Merge the Data Set
 // // d = d3.merge([data, [0]])
 
+// if (Array.isArray(d)){
+//     p.text(d.join(', '))
+// } else {
+//     p.text(d)
+// }
 
-if (Array.isArray(d)){
-    p.text(d.join(', '))
-} else {
-    p.text(d)
-}
+///////////////////////////////////////////////////////////////////////////
+// Lesson 9  Bins and Histograms
+///////////////////////////////////////////////////////////////////////////
+
+// let data = [5, 67, 2, 6, 3, 2, 32, 64, 23, 6, 23, 23, 53, 23]
+
+// let hist = d3.histogram()
+
+// // Calling the accessor function for more complicated cases, used for array of objects or nested arrays
+// // hist.value((d)=>d)
+
+// // hist.domain(d3.extent(data))  // Returns the array of min and max [2, 67]
+// // hist.domain([0,30])
+// hist.thresholds([5, 10, 15, 20, 25, 30, 35, 40])
+
+// let bins = hist(data)
+// console.log(bins)
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 10  Data Versus Datum 
+///////////////////////////////////////////////////////////////////////////
+
+// let d = [1, 2, 3, 4, 5, 6, 7]
+
+// // data() has access to enter, update, exit function -- more dynamic
+// let p = d3.select('body').selectAll('p').data(d).enter()
+//     .append('p').text((d)=>`I'm paragraph number ${d}`)
+
+// // This data variable will get added to every p selection
+// // d = 0;
+
+// // Data versus Datum difference
+// // Datum is used for less dynamic updates
+// // Here, the entire data set is bound to each element in the data set
+// p.datum(d).text((d)=>`I'm paragraph number ${d}`)
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 11  Click and Drag
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'gray')
+//     .attrs(dim)
+
+// let c = svg.append('circle').attrs({
+//     'cx': 300,
+//     'cy': 200,
+//     'r': 50,
+//     'fill': 'blue'
+// })
+//     .on('click', function(){
+//         d3.select(this).attr('fill', 'black')
+//     })
+
+// let drag = d3.drag()
+// drag.clickDistance(0)
+
+// drag.on('start', function() {
+//     d3.select(this).attr('stroke', 'black')
+// })
+
+// drag.on('drag', function() {
+//     let el = d3.select(this)
+//     el.attr('cx', parseInt(el.attr('cx')) + d3.event.dx)
+//     el.attr('cy', parseInt(el.attr('cy')) + d3.event.dy)
+// })
+
+// drag.on('end', function() {
+//     d3.select(this).attr('stroke', 'none')
+// })
+
+// c.call(drag)
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 12  Events and Onclick, Mouseover, etc.
+///////////////////////////////////////////////////////////////////////////
+
+// let dim ={
+//     'width': '600',
+//     'height': '300'
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+
+// let c = svg.append('circle').attrs({
+//     'cx': '300',
+//     'cy': '150',
+//     'r': '50',
+//     'fill': 'red'
+// })
+
+// c.on('mouseenter', function (d){
+//     d3.select(this).attr('fill', 'orange')
+// })
+//     .on('mouseleave', function (e){
+//         d3.select(this).attr('fill', 'red')
+//     })
+//     .on('click', function (e){
+//         d3.select(this).attr('fill', 'blue')
+//         console.log(d3.mouse(this))
+//     })
+//     .on('dblclick', function (e){
+//         d3.select(this).attr('fill', 'green')
+//     })

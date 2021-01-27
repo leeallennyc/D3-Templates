@@ -1,18 +1,4 @@
 import * as d3 from 'd3'
-import { attrs } from 'd3-selection-multi'
-
-let dim = {
-    'width': 600,
-    'height': 400
-}
-
-let svg = d3.select('body').append('svg')
-    .style('background', 'lightgray')
-    .attrs(dim)
-
-
-
-
 
 
 
@@ -181,3 +167,120 @@ let svg = d3.select('body').append('svg')
 // }
 
 // svg.append('polygon').attrs(attributes);
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 6 Text Attributes
+///////////////////////////////////////////////////////////////////////////
+
+// svg.append('line').attrs({
+//     'x1': 0,
+//     'x2': 600,
+//     'y1': 200,
+//     'y2': 200,
+//     'stroke': '#bbb'
+// })
+
+// svg.append('line').attrs({
+//     'x1': 300,
+//     'x2': 300,
+//     'y1': 0,
+//     'y2': 400,
+//     'stroke': '#bbb'
+// })
+
+// let attributes = {
+//     'x': 300,
+//     'y': 200,
+//     'textLength': 200,
+//     'lengthAdjust': 'spacingAndGlyphs',
+//     'font-size': 40,
+//     // 'rotate': 20,
+//     'font-family': 'Verdana',
+//     'font-style': 'Italic',
+//     'font-weight': 'bold',
+//     'alignment-baseline': 'middle',
+//     'text-anchor': 'middle',
+//     'letter-spacing': '5'
+// }
+
+// svg.append('text').attrs(attributes).text('1, 2, 3, 4, 5');
+
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 7 Text on Path
+///////////////////////////////////////////////////////////////////////////
+
+// let pth = `M 200,200
+//             Q300,150
+//             400,200`
+
+// svg.append('path').attrs({'d': pth, 'fill': 'none', 'stroke': 'red', 'id': 'pth'})
+
+// let attributes = {
+//     'href': '#pth',
+//     'font-size': 32,
+//     'text-anchor': 'middle',
+//     'startOffset': '50%'
+
+// }
+
+// svg.append('text').append('textPath').attrs(attributes).text('Text on Path')
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 8 Data Functions
+///////////////////////////////////////////////////////////////////////////
+
+// import { attrs } from 'd3-selection-multi'
+
+// let data = [3, 4, 5, 23, 5, 23, 4, 23, 5, 34, 56, 34, 21, 11, 15]
+
+// // data = [{a:2, b:4}, 
+// //         {a:-2, b:6}, 
+// //         {a:1, b:-5}]
+
+// d3.select('body').append('p').style('font-size', '24px')
+//     .text(data.join(', '))
+// d3.select('body').append('hr')
+
+// let p = d3.select('body').append('p').style('font-size', '24px')
+// let d
+
+// // statistical functions using d3.min, d3.max, d3. extent (accessor function is d.a)
+// // d = d3.min(data, (d)=>d.a)
+// // d = d3.max(data, (d)=>d.a)
+
+// // Using extent. The extent method returns the min and max. 
+// // d = d3.extent(data)
+
+// // Sum funciton -- Returns the Sum of elements
+// // d = d3.sum(data)
+
+// // Returns the mean
+// // d = d3.mean(data)
+
+// // Median Value
+// // d = d3.median(data)
+
+// // Quantile Value -- Shows the wrong result unless it is sorted in ascending order first!!
+// // d = d3.quantile(data.sort(d3.ascending), 0.50)
+
+// // Variance Value 
+// // d = d3.variance(data)
+
+// // Standard Deviation
+// // d = d3.deviation(data)
+
+// // Shuffling The Data, Adds a random order
+// // d = d3.shuffle(data)
+
+// // Merge the Data Set
+// // d = d3.merge([data, [0]])
+
+
+if (Array.isArray(d)){
+    p.text(d.join(', '))
+} else {
+    p.text(d)
+}

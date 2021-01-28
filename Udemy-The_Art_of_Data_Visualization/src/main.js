@@ -2,95 +2,41 @@ import * as d3 from 'd3'
 import { attrs } from 'd3-selection-multi'
 
 let dim = {
-    'width': '600',
-    'height': '300'
+    'width': 600,
+    'height': 400
 }
 
 let svg = d3.select('body').append('svg')
     .style('background', 'floralwhite')
     .attrs(dim)
 
+let data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140]
+let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+            'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-let data = d3.range(50, 501, 5)
-
-let lineAttrs = {
+svg.selectAll('line').data([50, 550]).enter().append('line').attrs({
     'x1': (d)=>d,
-    'y1': 200,
     'x2': (d)=>d,
-    'y2': (d, i)=> i%10 == 0 ? 220 : 210,
-    'stroke': 'gray'
-}
-
-let lines = svg.selectAll('line').data(data)
-    .enter().append('line').attrs(lineAttrs)
-
-let slider = svg.append('circle').attrs({
-    'cx': '50',
-    'cy': '200',
-    'r': '20',
-    'fill': 'white',
-    'stroke': 'black',
-    'cursor': 'grab'
+    'y1': 50,
+    'y2': 350,
+    'stroke': 'red'
 })
 
-function pushLines(){
-    
-}
+let scaleY = d3.scaleLinear([0, d3.max(data)], [350, 50])
 
+let scaleX = d3.scalePoint()
+    .domain(months)
+    .range([50, 550])
+    .padding(0)
 
-// let c = svg.append('circle').attrs({
-//     'cx': '300',
-//     'cy': '150',
-//     'r': '25',
-//     'fill': 'red'
-// })
-//     .on('click', function(){
-//         d3.select(this).attr('fill', 'orange')
-//     })
+svg.selectAll('circle').data(months).enter().append('circle').attrs({
+    'cx': (d)=>scaleX(d),
+    'cy': (d,i)=> scaleY(data[i]),
+    'r': 5,
+    'fill': 'orange'
+})
 
-// let drag = d3.drag()
-// drag.clickDistance(0)
-
-    
-// drag.on('click', function(){
-//     d3.selection(this).attr('stroke', 'black')
-// })
-
-// drag.on('drag', function(){
-//     let el = d3.select(this)
-//     el.attr('cx', parseInt(el.attr('cx')) + d3.event.dx)
-//     el.attr('cy', parseInt(el.attr('cy')) + d3.event.dy)
-// })
-
-// drag.on('end', function(){
-//     d3.select(this).attr('stroke', 'none')
-// })
-    
-
-// c.call(drag)
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+console.log(scaleX.bandwidth())
 
 
 
@@ -486,3 +432,280 @@ function pushLines(){
 //     .on('dblclick', function (e){
 //         d3.select(this).attr('fill', 'green')
 //     })
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 13 Scroll Bar with numbers
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'lightgray')
+//     .attrs(dim)
+
+// let data = d3.range(50, 551, 5)
+
+// let lineAtts = {
+//     'x1': (d)=>d,
+//     'y1': 200,
+//     'x2': (d)=>d,
+//     'y2': (d, i) => i % 10 == 0 ? 220 : 210,
+//     'stroke': 'red'
+// }
+// let lines = svg.selectAll('line').data(data)
+//     .enter().append('line').attrs(lineAtts)
+
+// let drag = d3.drag()
+// drag.on('start', function(){
+//         d3.select(this).attrs({
+//             'stroke': 'red',
+//             'cursor': 'none'
+//         })
+//     })
+//     .on('drag', function(){
+//         let el = d3.select(this)
+//         let xPos = parseInt(el.attr('cx'))
+//         let nPos = xPos + d3.event.dx
+//         if (nPos < 50) nPos = 50
+//         if (nPos > 550) nPos = 550
+//         el.attr('cx', nPos)
+//         pushLines()
+//     })
+//     .on('end', function(){
+//         d3.select(this).attrs({
+//             'stroke': 'black',
+//             'cursor': 'grab'
+//         })
+//     })
+
+// let slider = svg.append('circle').attrs({
+//     'cx': 50,
+//     'cy': 200,
+//     'r': 20,
+//     'fill': 'white',
+//     'stroke': 'black',
+//     'cursor': 'grab'
+// }).call(drag)
+
+// let label = svg.append('text').attrs({
+//     'x': 50,
+//     'y': 200,
+//     'text-anchor': 'middle',
+//     'alignment-baseline': 'middle'
+// }).text(50).style('pointer-events', 'none')
+
+// function pushLines(){
+//     lines.each(function(d, i){
+//         let el = d3.select(this)
+//         let x = parseInt(el.attr('x1'))
+//         let sx = parseInt(slider.attr('cx'))
+//         let dx = Math.abs(sx - x)
+//         let r = 25
+//         if (x >= sx - r && x <= sx + r) {
+//             let dy = Math.sqrt(Math.abs(r * r - dx * dx))
+//             el.attr('y1', 200 + dy)
+//             el.attr('y2', i % 10 == 0 ? 220 + dy : 210 + dy)
+//         } else {
+//             el.attr('y1', 200)
+//             el.attr('y2', i % 10 == 0 ? 220 : 210)
+//         }
+//         label.text(slider.attr('cx'))
+//         label.attr('x', slider.attr('cx'))
+//     })
+// }
+
+// pushLines()
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 14 Scale and Domain
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 300
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+
+// let data = [10, 20, 30, 20, 20, 34, 54, 52, 34, 45, 444, 225, 555, 600]
+
+// let scale = d3.scaleLinear()
+//     .domain(d3.extent(data))
+//     .range([50, 550] )
+
+// console.log(scale(10)) // produces 50 maps to
+// console.log(scale(600))  // produces 550 maps to
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 15 Linear Scale
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 300
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+
+// let data = [10, 20, 30, 20, 20, 34, 54, 52, 34, 45, 444, 225, 555, 600]
+
+// // ScaleLinear() converts the min and max in the data set to the domain and range set
+// let scale = d3.scaleLinear()
+//     .domain(d3.extent(data))
+//     .rangeRound([50, 550])
+
+
+// svg.selectAll('circle').data(data).enter().append('circle')
+//     .attrs({
+//         'cx': (d)=>scale(d),
+//         'cy': 200, 
+//         'r': 10,
+//         'opacity': 0.5
+//     })
+
+// console.log(scale(10)) // produces 50 maps to
+// console.log(scale(600))  // produces 550 maps to
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 16 Color Quantize, Quantile, Threshold
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 300
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+
+// let data = [10, 12, 14, 17, 19, 20, 34, 54, 52, 34, 45, 444, 225, 555, 600]
+
+// // ScaleLinear() converts the min and max in the data set to the domain and range set
+// let scale = d3.scaleLinear()
+//     .domain(d3.extent(data))
+//     .rangeRound([50, 550])
+
+// // Domain is continuous
+// // let color = d3.scaleQuantize()
+// //     .domain(d3.extent(data))
+// //     .range(['red', 'blue', 'green', 'magenta'])
+
+// // Domain is Discrete
+// // let color = d3.scaleQuantile()
+// //     .domain(d3.extent(data))
+// //     .range(['red', 'blue', 'green'])
+
+// // Domain First number is for all values under 52, next color if for values between 52 and 226 and last is for any values in data abov 226 which are green
+// let color = d3.scaleThreshold()
+//     .domain([52, 226])
+//     .range(['red', 'blue', 'green'])
+
+
+// svg.selectAll('circle').data(data).enter().append('circle')
+//     .attrs({
+//         'cx': (d)=>scale(d),
+//         'cy': 150, 
+//         'r': 10,
+//         'opacity': 0.5,
+//         'fill': (d)=>color(d)
+//     })
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 16 ScaleBand and Bar Chart
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let data = [10, 20, 30, 45, 55, 67, 70, 88, 90, 130, 150, 200]
+// let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+//             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+
+
+// svg.selectAll('line').data([50, 550]).enter().append('line').attrs({
+//     'x1': (d)=>d,
+//     'x2': (d)=>d,
+//     'y1': 50, 
+//     'y2': 350,
+//     'stroke': 'black'
+// })
+
+// let scaleY = d3.scaleLinear([0, d3.max(data)], [350, 50])
+
+// let scaleX = d3.scaleBand()
+//     .domain(months)
+//     .range([50, 550])
+//     .paddingOuter(0)
+//     .paddingInner(0.4)
+
+// svg.selectAll('rect').data(months).enter().append('rect').attrs({
+//     'x': (d)=>scaleX(d),
+//     'y': (d, i)=> scaleY(data[i]),
+//     'width': scaleX.bandwidth(),
+//     'height': (d, i)=> scaleY(0) - scaleY(data[i]),
+//     'fill': 'orange'
+// })
+
+// Scale Ordinal            
+// let scale = d3.scaleOrdinal()
+//     .domain(months)
+//     .range(data)
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 17 ScalePoint
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140]
+// let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+//             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+
+// svg.selectAll('line').data([50, 550]).enter().append('line').attrs({
+//     'x1': (d)=>d,
+//     'x2': (d)=>d,
+//     'y1': 50,
+//     'y2': 350,
+//     'stroke': 'red'
+// })
+
+// let scaleY = d3.scaleLinear([0, d3.max(data)], [350, 50])
+
+// let scaleX = d3.scalePoint()
+//     .domain(months)
+//     .range([50, 550])
+//     .padding(0)
+
+// svg.selectAll('circle').data(months).enter().append('circle').attrs({
+//     'cx': (d)=>scaleX(d),
+//     'cy': (d,i)=> scaleY(data[i]),
+//     'r': 5,
+//     'fill': 'orange'
+// })
+
+// console.log(scaleX.bandwidth())

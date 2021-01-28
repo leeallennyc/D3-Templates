@@ -1,123 +1,145 @@
 import * as d3 from 'd3'
 import { attrs } from 'd3-selection-multi'
 
-let dim = { 
-    'width': 720, 
-    'height': 500
-}
 
+let dim = { 'width': 770, 'height': 400 }
 let svg = d3.select('body').append('svg')
-    .style('background', 'floralwhite')
+    // .style('background', 'lightgrey')
     .attrs(dim)
 
-d3.select('body').append('div').append('button').text('Change data')
-.on('click', changeData)
+d3.json('data.json').then(d=>main(d))
 
-let plotArea = {
-    'x': 50,
-    'y': 50,
-    'width': 620,
-    'height': 400
+let menu = d3.select('body').append('select')
+
+let axisContainer = svg.append('g').attrs({
+    'id': 'axis',
+    'transform': 'translate(0, 360)'
+})
+
+let pathsContainer = svg.append('g')
+let legendContainer = svg.append('g')
+
+function main(dataset) {
+    let options = menu.selectAll('options').data(Object.keys(dataset))
+    options.enter().append('option').attr('value', d=>d).text(d=>d)
+    options.exit().remove()
+    menu.on('change', function(){
+        draw(dataset[menu.select('option:checked').text()])
+    })
+    draw(dataset[menu.select('option:checked').text()])
 }
-svg.append('clipPath').attr('id', 'plot-area')
-    .append('rect').attrs(plotArea)
 
-svg.append('g').attrs({
-    'transform': 'translate(0, 450)',
-    'id': 'x-grid',
-    'class': 'grid'
-})
-svg.append('g').attrs({
-    'transform': 'translate(50, 0)',
-    'id': 'y-grid',
-    'class': 'grid'
-})
-svg.append('g').attrs({
-    'transform': 'translate(0, 450)',
-    'id': 'x-axis'
-})
-svg.append('g').attrs({
-    'transform': 'translate(50, 0)',
-    'id': 'y-axis'
-})
+function draw(data) {
+    console.log(data)
+    let t = d3.transition().duration(1000)
+    let stack = d3.stack().keys(Object.keys(data[0]))
+    stack.order(d3.stackOrderReverse)
+    stack.offset(d3.stackOffsetSilhouette)
+    let stackData = stack(data)
+    console.log(stackData)
+    let minV = d3.min(stackData, d=>d3.min(d, d=>d3.min(d)))
+    let maxV = d3.max(stackData, d=>d3.max(d, d=>d3.max(d)))
 
-let container = svg.append('g').attr('clip-path', 'url(#plot-area)')
+    let scaleX = d3.scaleLinear([0, data.length - 1], [100, 750])
+    let scaleY = d3.scaleLinear([minV, maxV], [300, 50])
+    let colors = d3.schemeOrRd[stackData.length]
 
-svg.append('polyline').attrs({
-    'points': '50,50 670,50 670,450',
-    'stroke': 'black',
-    'fill': 'none'
-})
+    let axis = d3.axisBottom(scaleX)
+    axis.ticks(data.length)
+    axis.tickFormat(d=>`CW${d + 1}`)
+    axis.tickSize(-330)
 
-
-let dataset
-changeData()
-
-function changeData(){
-    // dataset size random number from range 60 to 100
-    let size = Math.round(Math.random() * 40) + 60
-    // generate the data - an array of objects
-    dataset = []
-    for (let i = 0; i < size; i++) {
-        dataset.push({
-            weight: Math.round(Math.random() * 50) + 55,
-            height: Math.round(Math.random() * 30) + 160,
+    axisContainer.call(axis)
+        .call(d=>d.select('.domain').remove())
+        .selectAll('line').attrs({
+            'stroke': 'gray',
+            'stroke-dasharray': '6 3'
         })
+
+    let area = d3.area()
+        .x((d, i)=>scaleX(i))
+        .y0(d=>scaleY(d[0]))
+        .y1(d=>scaleY(d[1]))
+        .curve(d3.curveCatmullRom)
+
+    let paths = pathsContainer.selectAll('path').data(stackData)
+    let attributes = {
+        'd': area,
+        'stroke': 'gray',
+        'fill': (d, i)=>colors[i],
+        'fill-opacity': 0.75,
+        'id': (d, i)=>Object.keys(data[0])[i]
     }
-    console.log(dataset)
-    draw()
-}
+    paths.enter().append('path').attrs(attributes)
+        .on('mousemove', updateLabels)
+        .on('mouseleave', resetLabels)
+    paths.transition(t).attrs(attributes)
+    paths.on('mousemove', updateLabels)
+        .on('mouseleave', resetLabels)
+    paths.exit().remove()
 
-function draw() {
-    let t = d3.transition().duration(2000)
-    // Scales
-    let scaleX = d3.scaleLinear(d3.extent(dataset, (d)=>d.weight), [50, 670])
-    let scaleY = d3.scaleLinear(d3.extent(dataset, (d)=>d.height), [450, 50])
-    let scaleS = d3.scaleSqrt()
-        .domain(d3.extent(dataset, (d)=>d.weight / d.height))
-        .range([8, 20])
-    let scaleC = d3.scaleDiverging(d3.interpolateOrRd)
-        .domain([
-            d3.max(dataset, (d)=>d.weight / d.height),
-            d3.median(dataset, (d)=>d.weight / d.height),
-            d3.min(dataset, (d)=>d.weight / d.height)
-        ])
-
-    let gridX = d3.axisBottom(scaleX)
-    gridX.tickFormat('').tickSize(-400).tickSizeOuter(0)
-    d3.select('#x-grid').transition(t).call(gridX)
-    let gridY = d3.axisLeft(scaleY)
-    gridY.tickFormat('').tickSize(-620).tickSizeOuter(0)
-    d3.select('#y-grid').transition(t).call(gridY)
-    d3.selectAll('.grid').selectAll('line').attrs({
-        'stroke': 'lightgray',
-        'stroke-dasharray': '5 3'
+    let markers = svg.selectAll('circle')
+        .data(d3.range(stackData.length + 1))
+    markers.enter().append('circle').attrs({
+        'cx': -10, 'cy': -10, 'r': 3, 'fill': 'darkred'
     })
 
-    let axisX = d3.axisBottom(scaleX)
-    d3.select('#x-axis').transition(t).call(axisX)
-    let axisY = d3.axisLeft(scaleY)
-    d3.select('#y-axis').transition(t).call(axisY)
-    
-   
-
-    // bubbles
-    let cAtts = {
-        'cx': (d)=>scaleX(d.weight),
-        'cy': (d)=>scaleY(d.height),
-        'r': (d)=>scaleS(d.weight / d.height),
-        'fill': (d)=>scaleC(d.weight / d.height),
-        'stroke': 'gray', 'opacity': 0.75
+    function updateLabels() {
+        let ix = Math.round(scaleX.invert(d3.event.x))
+        let txt = Object.keys(data[ix])
+        let markerNodes = d3.selectAll('circle').nodes()
+        for (let i = 0; i < txt.length; i++) {
+            d3.select('#label' + txt[i])
+                .text(txt[i] + ': ' + data[ix][txt[i]])
+            // markers update
+            d3.select(markerNodes[i]).attrs({
+                'cx': scaleX(ix),
+                'cy': scaleY(stackData[i][ix][0])
+            })
+        }
+        d3.select(markerNodes[txt.length]).attrs({
+            'cx': scaleX(ix),
+            'cy': scaleY(stackData[0][ix][1])
+        })
     }
-    let circles = container.selectAll('circle').data(dataset)
-    circles.enter().append('circle').attrs({
-        'cx': (d)=>scaleX(d.weight),
-        'cy': (d)=>scaleY(d.height),
-        'r': 0 })
-        .transition(t).attrs(cAtts)
-    circles.transition(t).attrs(cAtts)
-    circles.exit().transition(t).attr('r', 0).remove()
+
+    function resetLabels() {
+        let txt = Object.keys(data[0])
+        for (let i = 0; i < txt.length; i++) {
+            d3.select('#label' + txt[i]).text(txt[i])
+        }
+        d3.selectAll('circle').attrs({ 'cx': -10, 'cy': -10 })
+    }
+
+    let rects = legendContainer.selectAll('rect').data(Object.keys(data[0]))
+    attributes = {
+        'stroke': 'gray',
+        'fill': (d, i)=>colors[i],
+        'fill-opacity': 0.75,
+        'width': 12,
+        'height': 12,
+        'x': 10
+    }
+    rects.enter().append('rect').attrs(attributes)
+        .attr('y', (d, i)=>100 + i * 22)
+    rects.exit().remove()
+
+    let legend = legendContainer.selectAll('text').data(Object.keys(data[0]))
+    attributes = {
+        'fill': 'gray', 'alignment-baseline': 'hanging',
+        'x': 26
+    }
+    legend.enter().append('text').attrs(attributes)
+        .attr('y', (d, i)=>100 + i * 22 ).text(d=>d)
+        .attr('id', (d)=>'label' + d)
+    legend.text(d=>d)
 }
+
+
+
+
+
+
 
 
 
@@ -1007,3 +1029,627 @@ function draw() {
 // }
 
 // console.log(d3.easeExpIn(0.5))
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 24 Bubble Chart with Changing Data
+///////////////////////////////////////////////////////////////////////////
+
+
+// let dim = { 
+//     'width': 720, 
+//     'height': 500
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// d3.select('body').append('div').append('button').text('Change data')
+// .on('click', changeData)
+
+// let plotArea = {
+//     'x': 50,
+//     'y': 50,
+//     'width': 620,
+//     'height': 400
+// }
+// svg.append('clipPath').attr('id', 'plot-area')
+//     .append('rect').attrs(plotArea)
+
+// svg.append('g').attrs({
+//     'transform': 'translate(0, 450)',
+//     'id': 'x-grid',
+//     'class': 'grid'
+// })
+// svg.append('g').attrs({
+//     'transform': 'translate(50, 0)',
+//     'id': 'y-grid',
+//     'class': 'grid'
+// })
+// svg.append('g').attrs({
+//     'transform': 'translate(0, 450)',
+//     'id': 'x-axis'
+// })
+// svg.append('g').attrs({
+//     'transform': 'translate(50, 0)',
+//     'id': 'y-axis'
+// })
+
+// let container = svg.append('g').attr('clip-path', 'url(#plot-area)')
+
+// svg.append('polyline').attrs({
+//     'points': '50,50 670,50 670,450',
+//     'stroke': 'black',
+//     'fill': 'none'
+// })
+
+
+// let dataset
+// changeData()
+
+// function changeData(){
+//     // dataset size random number from range 60 to 100
+//     let size = Math.round(Math.random() * 40) + 60
+//     // generate the data - an array of objects
+//     dataset = []
+//     for (let i = 0; i < size; i++) {
+//         dataset.push({
+//             weight: Math.round(Math.random() * 50) + 55,
+//             height: Math.round(Math.random() * 30) + 160,
+//         })
+//     }
+//     console.log(dataset)
+//     draw()
+// }
+
+// function draw() {
+//     let t = d3.transition().duration(2000)
+//     // Scales
+//     let scaleX = d3.scaleLinear(d3.extent(dataset, (d)=>d.weight), [50, 670])
+//     let scaleY = d3.scaleLinear(d3.extent(dataset, (d)=>d.height), [450, 50])
+//     let scaleS = d3.scaleSqrt()
+//         .domain(d3.extent(dataset, (d)=>d.weight / d.height))
+//         .range([8, 20])
+//     let scaleC = d3.scaleDiverging(d3.interpolateOrRd)
+//         .domain([
+//             d3.max(dataset, (d)=>d.weight / d.height),
+//             d3.median(dataset, (d)=>d.weight / d.height),
+//             d3.min(dataset, (d)=>d.weight / d.height)
+//         ])
+
+//     let gridX = d3.axisBottom(scaleX)
+//     gridX.tickFormat('').tickSize(-400).tickSizeOuter(0)
+//     d3.select('#x-grid').transition(t).call(gridX)
+//     let gridY = d3.axisLeft(scaleY)
+//     gridY.tickFormat('').tickSize(-620).tickSizeOuter(0)
+//     d3.select('#y-grid').transition(t).call(gridY)
+//     d3.selectAll('.grid').selectAll('line').attrs({
+//         'stroke': 'lightgray',
+//         'stroke-dasharray': '4 3'
+//     })
+
+//     let axisX = d3.axisBottom(scaleX)
+//     d3.select('#x-axis').transition(t).call(axisX)
+//     let axisY = d3.axisLeft(scaleY)
+//     d3.select('#y-axis').transition(t).call(axisY)
+    
+   
+
+//     // bubbles
+//     let cAtts = {
+//         'cx': (d)=>scaleX(d.weight),
+//         'cy': (d)=>scaleY(d.height),
+//         'r': (d)=>scaleS(d.weight / d.height),
+//         'fill': (d)=>scaleC(d.weight / d.height),
+//         'stroke': 'gray', 'opacity': 0.75
+//     }
+//     let circles = container.selectAll('circle').data(dataset)
+//     circles.enter().append('circle').attrs({
+//         'cx': (d)=>scaleX(d.weight),
+//         'cy': (d)=>scaleY(d.height),
+//         'r': 0 })
+//         .transition(t).attrs(cAtts)
+//     circles.transition(t).attrs(cAtts)
+//     circles.exit().transition(t).attr('r', 0).remove()
+// }
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 25 Force Simulation with Nodes
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = { 'width': 600, 'height': 400 }
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'lightgrey')
+//     .attrs(dim)
+//     .on('click', clicked)
+
+// let colors = ['orange', 'teal']
+// let dataset = d3.range(100).map(function() {
+//     return {
+//         'r': Math.round(Math.random() * 10) + 5,
+//         'color': colors[Math.round(Math.random())]
+//     };
+// });
+
+// let sim = d3.forceSimulation(dataset)
+
+// let nodes = svg.append('g').selectAll('circle').data(dataset)
+//     .enter().append('circle').attrs({
+//         'r': (d)=>d.r,
+//         'fill': (d)=>d.color,
+//         'stroke': 'black',
+//     })
+
+// sim.on('tick', function(d) {
+//     nodes.attrs({
+//         'cx': (d)=>d.x,
+//         'cy': (d)=>d.y
+//     })
+// })
+
+// sim.force('yForce', d3.forceY(200))
+//     .force('center', d3.forceX(300))
+//     .force('right', d3.forceX(500).strength(0))
+//     .force('left', d3.forceX(100).strength(0))
+//     .force('collide', d3.forceCollide().radius((d)=>d.r))
+
+// sim.force('right').initialize(dataset.filter(function (d){
+//     return d.color == 'teal'
+// }))
+// sim.force('left').initialize(dataset.filter(function (d){
+//     return d.color == 'orange'
+// }))
+
+// sim.alphaDecay(0.08)
+// sim.velocityDecay(0.2)
+
+// let allInCenter = true
+// function clicked() {
+//     allInCenter = !allInCenter
+//     if (allInCenter) {
+//         sim.force('right').strength(0)
+//         sim.force('left').strength(0)
+//         sim.force('center').strength(0.1)
+//         sim.alpha(1).restart()
+//     } else {
+//         sim.force('right').strength(0.1)
+//         sim.force('left').strength(0.1)
+//         sim.force('center').strength(0)
+//         sim.alpha(1).restart()
+//     }
+// }
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 26 Radial Clusters and Transitions
+///////////////////////////////////////////////////////////////////////////
+
+// import * as d3 from 'd3'
+// import { attrs } from 'd3-selection-multi'
+// let ix = 0
+// let dim = { 'width': 600, 'height': 400 }
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'lightgrey')
+//     .attrs(dim)
+//     .on('click', function(){
+//         if (ix == 0) {
+//             ix++
+//             verticalCluster()
+//         } else if (ix == 1) {
+//             ix++
+//             horizontalTree()
+//         } else if (ix == 2) {
+//             ix++
+//             horizontalCluster()
+//         } else if (ix == 3) {
+//             ix++
+//             radialTree()
+//         } else if (ix == 4) {
+//             ix++
+//            radialCluster()
+//         } else if (ix == 5) {
+//             ix = 0
+//             verticalTree()
+//         }
+//     })
+
+
+// let data = {
+//     'name': 'Root', 'child': [
+//         {'name': 'A', 'child': [{'name': 'A1'}, {'name': 'A2'}]},
+//         {'name': 'B'},
+//         {'name': 'C', 'child': [{'name': 'C1'}, {'name': 'C2'}]},
+//         {'name': 'D'}
+//     ]
+// }
+
+// let rootNode = d3.hierarchy(data, d=>d.child)
+
+// console.log(rootNode.links())
+// console.log(rootNode.descendants())
+
+// let g = svg.append('g').attr('transform', 'translate(50, 50)')
+
+// let links = g.selectAll('path').data(rootNode.links()).enter()
+//     .append('path').attrs({'fill': 'none', 'stroke': 'gray'})
+// let dots = g.selectAll('circle').data(rootNode.descendants()).enter()
+//     .append('circle').attrs({'fill': 'red', 'stroke': 'gray', 'r': 3})
+// let labels = g.selectAll('text').data(rootNode.descendants()).enter()
+//     .append('text').attr('text-anchor', 'middle')
+
+
+// function verticalTree() {
+//    g.transition().duration(2000).attr('transform', 'translate(50, 50)')
+//    let layout = d3.tree().size([500, 300])
+//    layout(rootNode)
+//    links.data(rootNode.links()).transition().duration(2000)
+//     .attr('d', d3.linkVertical().x(d=>d.x).y(d=>d.y))
+//    dots.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'cx': d=>d.x, 'cy': d=>d.y})
+//    labels.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'x': d=>d.x, 'y': d=>d.y - 10 }).text(d=>d.data.name)
+// }
+
+
+
+// function verticalCluster() {
+//     g.transition().duration(2000).attr('transform', 'translate(50, 50)')
+//    let layout = d3.cluster().size([500, 300])
+//    layout(rootNode)
+//    links.data(rootNode.links()).transition().duration(2000)
+//     .attr('d', d3.linkVertical().x(d=>d.x).y(d=>d.y))
+//    dots.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'cx': d=>d.x, 'cy': d=>d.y})
+//    labels.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'x': d=>d.x, 'y': d=>d.y - 10 }).text(d=>d.data.name)
+// }
+
+
+// function horizontalTree() {
+//     g.transition().duration(2000).attr('transform', 'translate(50, 50)')
+//    let layout = d3.tree().size([300, 500])
+//    layout(rootNode)
+//    links.data(rootNode.links()).transition().duration(2000)
+//     .attr('d', d3.linkHorizontal().x(d=>d.y).y(d=>d.x))
+//    dots.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'cx': d=>d.y, 'cy': d=>d.x})
+//    labels.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'x': d=>d.y, 'y': d=>d.x - 10 }).text(d=>d.data.name)
+// }
+
+
+// function horizontalCluster() {
+//     g.transition().duration(2000).attr('transform', 'translate(50, 50)')
+//    let layout = d3.cluster().size([300, 500])
+//    layout(rootNode)
+//    links.data(rootNode.links()).transition().duration(2000)
+//     .attr('d', d3.linkHorizontal().x(d=>d.y).y(d=>d.x))
+//    dots.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'cx': d=>d.y, 'cy': d=>d.x})
+//    labels.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'x': d=>d.y, 'y': d=>d.x - 10 }).text(d=>d.data.name)
+// }
+
+
+// function radialTree() {
+//     g.transition().duration(2000).attr('transform', 'translate(300, 200)')
+//    let layout = d3.tree().size([Math.PI * 2, 150])
+//    layout(rootNode)
+//    links.data(rootNode.links()).transition().duration(2000)
+//     .attr('d', d3.linkRadial().angle(d=>d.x).radius(d=>d.y))
+//    dots.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'cx': d=>radialPt(d.x, d.y)[0], 'cy': d=>radialPt(d.x, d.y)[1]})
+//    labels.data(rootNode.descendants()).transition().duration(2000)
+//     .attrs({'x': d=>radialPt(d.x, d.y)[0], 'y': d=>radialPt(d.x, d.y)[1] - 10 }).text(d=>d.data.name)
+// }
+
+
+// function radialCluster() {
+//     g.transition().duration(2000).attr('transform', 'translate(300, 200)')
+//     let layout = d3.cluster().size([Math.PI * 2, 150])
+//     layout(rootNode)
+//     links.data(rootNode.links()).transition().duration(2000)
+//      .attr('d', d3.linkRadial().angle(d=>d.x).radius(d=>d.y))
+//     dots.data(rootNode.descendants()).transition().duration(2000)
+//      .attrs({'cx': d=>radialPt(d.x, d.y)[0], 'cy': d=>radialPt(d.x, d.y)[1]})
+//     labels.data(rootNode.descendants()).transition().duration(2000)
+//      .attrs({'x': d=>radialPt(d.x, d.y)[0], 'y': d=>radialPt(d.x, d.y)[1] - 10 }).text(d=>d.data.name)
+// }
+
+// verticalTree()
+
+// function radialPt(x, y) {
+//     return [y * Math.cos(x -= Math.PI / 2), y * Math.sin(x)]
+// }
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 27 Line Generator
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = { 'width': 600, 'height': 400 }
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'lightgrey')
+//     .attrs(dim)
+//     .on('click', function(d) {
+//         ix++
+//         ix = (ix === curves.length)? 0 : ix
+//         lineGenerator.curve(curves[ix][1])
+//         svg.select('path').attr('d', lineGenerator(dataset))
+//         svg.select('text').text(curves[ix][0])
+//     })
+
+// let dataset = [[100, 200], [150, 100], [200, 150], [250, 300],
+//                [300, 120], [350, 200], [400, 100], [450, 250]]
+
+// let points = svg.append('g').selectAll('circle').data(dataset).enter()
+//     .append('circle').attrs({'r': 5, 'cx': (d)=>d[0], 'cy': (d)=>d[1],
+//                              'fill': 'red'})
+
+// svg.append('text').attrs({'x': 20, 'y': 20})
+
+// let lineGenerator = d3.line()
+// lineGenerator.x((d)=>d[0])
+// lineGenerator.y((d)=>d[1])
+
+// lineGenerator.curve(d3.curveCardinal.tension(0))
+
+// svg.append('path').attrs({
+//     'd': lineGenerator(dataset),
+//     'stroke': 'black',
+//     'stroke-width': 2,
+//     'fill': 'none'
+// })
+
+// let ix = 0
+// let curves = [
+//     ['curveBasis', d3.curveBasis],
+//     ['curveBasisClosed', d3.curveBasisClosed],
+//     ['curveBasisOpen', d3.curveBasisOpen],
+//     ['curveBundle', d3.curveBundle],
+//     ['curveCardinal', d3.curveCardinal],
+//     ['curveCardinalClosed', d3.curveCardinalClosed],
+//     ['curveCardinalOpen', d3.curveCardinalOpen],
+//     ['curveCatmullRom', d3.curveCatmullRom],
+//     ['curveCatmullRomClosed', d3.curveCatmullRomClosed],
+//     ['curveCatmullRomOpen', d3.curveCatmullRomOpen],
+//     ['curveLinear', d3.curveLinear],
+//     ['curveLinearClosed', d3.curveLinearClosed],
+//     ['curveMonotoneX', d3.curveMonotoneX],
+//     ['curveMonotoneY', d3.curveMonotoneY],
+//     ['curveNatural', d3.curveNatural],
+//     ['curveStep', d3.curveStep],
+//     ['curveStepAfter', d3.curveStepAfter],
+//     ['curveStepBefore', d3.curveStepBefore]
+// ]
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 28 Area Generator
+///////////////////////////////////////////////////////////////////////////
+
+
+// import * as d3 from 'd3'
+// import { attrs } from 'd3-selection-multi'
+
+// let dim = { 'width': 600, 'height': 400 }
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'lightgrey')
+//     .attrs(dim)
+//     .on('click', function(d) {
+//         ix++
+//         ix = (ix === curves.length)? 0 : ix
+//         areaGenerator.curve(curves[ix][1])
+//         svg.select('path').attr('d', areaGenerator(dataset))
+//         svg.select('text').text(curves[ix][0])
+//     })
+
+// let dataset = [[100, 200], [150, 100], [200, 150], [250, 300],
+//                [300, 120], [350, 200], [400, 100], [450, 250]]
+
+// let points = svg.append('g').selectAll('circle').data(dataset).enter()
+//     .append('circle').attrs({'r': 5, 'cx': (d)=>d[0], 'cy': (d)=>d[1],
+//                              'fill': 'red'})
+
+// svg.append('text').attrs({'x': 20, 'y': 20})
+
+// let areaGenerator = d3.area()
+
+// areaGenerator.y0(200)
+
+// areaGenerator.curve(d3.curveCardinal.tension(.5))
+
+// svg.append('path').attrs({
+//     'd': areaGenerator(dataset),
+//     'fill': 'gray'
+// })
+
+// let ix = 0
+// let curves = [
+//     ['curveBasis', d3.curveBasis],
+//     // ['curveBasisClosed', d3.curveBasisClosed],
+//     ['curveBasisOpen', d3.curveBasisOpen],
+//     ['curveCardinal', d3.curveCardinal],
+//     // ['curveCardinalClosed', d3.curveCardinalClosed],
+//     ['curveCardinalOpen', d3.curveCardinalOpen],
+//     ['curveCatmullRom', d3.curveCatmullRom],
+//     // ['curveCatmullRomClosed', d3.curveCatmullRomClosed],
+//     ['curveCatmullRomOpen', d3.curveCatmullRomOpen],
+//     ['curveLinear', d3.curveLinear],
+//     // ['curveLinearClosed', d3.curveLinearClosed],
+//     ['curveMonotoneX', d3.curveMonotoneX],
+//     ['curveMonotoneY', d3.curveMonotoneY],
+//     ['curveNatural', d3.curveNatural],
+//     ['curveStep', d3.curveStep],
+//     ['curveStepAfter', d3.curveStepAfter],
+//     ['curveStepBefore', d3.curveStepBefore]
+// ]
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 29 Arc and Pie Generator
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = { 'width': 600, 'height': 400 }
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'lightgrey')
+//     .attrs(dim)
+
+
+// let arcGen = d3.arc()
+// arcGen.innerRadius(80).outerRadius(120) // .cornerRadius(10)
+
+// let data = [10, 15, 35, 40, 42, 50]
+// let colors = d3.schemeOranges[data.length]
+
+// let arcs = d3.pie()(data)
+// // arcs = arcs(data)
+// console.log(arcs) 
+
+// svg.selectAll('path').data(arcs).enter().append('path')
+//     .attrs({
+//         'd': arcGen,  // same as 'd': d=>arcGen(d)
+//         'stroke': 'black',
+//         'fill': (d, i)=>colors[i],
+//         'transform': 'translate(300,200)'
+//     })
+
+// arcs.forEach((d)=>{
+//     console.log(arcGen.centroid(d))
+// })
+
+
+// svg.selectAll('circle').data(arcs).enter().append('circle')
+//     .attrs({
+//         'r': 2,
+//         'cx': (d)=>arcGen.centroid(d)[0],
+//         'cy': (d)=>arcGen.centroid(d)[1],
+//         'transform': 'translate(300,200)'
+//     })
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 30 Stacks
+///////////////////////////////////////////////////////////////////////////
+
+
+// import * as d3 from 'd3'
+// import { attrs } from 'd3-selection-multi'
+// import { color } from 'd3'
+
+
+// let dim = { 'width': 600, 'height': 400 }
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'lightgrey')
+//     .attrs(dim)
+
+// let data = [
+//     {a: 40, b: 30, c: 10, d: 50},
+//     {a: 45, b: 31, c: 10, d: 50},
+//     {a: 42, b: 34, c: 0, d: 0},
+//     {a: 38, b: 29, c: 15, d: 40},
+//     {a: 21, b: 25, c: 20, d: 52},
+//     {a: 40, b: 12, c: 18, d: 4},
+//     {a: 30, b: 0, c: 16, d: 38},
+//     {a: 35, b: 22, c: 22, d: 45},
+//     {a: 35, b: 28, c: 64, d: 42},
+//     {a: 36, b: 34, c: 30, d: 41},
+// ]
+
+// let stack = d3.stack().keys(['a', 'b', 'c', 'd'])
+// let stackedData = stack(data)
+
+// console.log(stackedData)
+
+// let minV = d3.min(stackedData, d=>d3.min(d, d=>d3.min(d)))
+// let maxV = d3.max(stackedData, d=>d3.max(d, d=>d3.max(d)))
+
+// let scaleX = d3.scaleLinear([0, 9], [0, 600])
+// let scaleY = d3.scaleLinear([minV, maxV], [350, 50])
+// let colors = d3.schemeSpectral[stackedData.length]
+
+// let area = d3.area()
+//     .x((d, i)=>scaleX(i))
+//     .y0(d=>scaleY(d[0]))
+//     .y1(d=>scaleY(d[1]))
+//     .curve(d3.curveBasis)
+
+// svg.selectAll('path').data(stackedData).enter().append('path').attrs({
+//     'stroke': 'black',
+//     'fill': (d, i)=> colors[i],
+//     'd': area
+// })
+
+// let order = svg.append('text').attrs({
+//     'x': 20,
+//     'y': 25,
+//     'alignment-baseline': 'middle'
+// }).text('order')
+//     .on('click', function(){
+//         if (order.text() == 'order') {
+//             order.text('d3.stackOrderAppearance')
+//             stack.order(d3.stackOrderAppearance)
+//         } else if (order.text() == 'd3.stackOrderAppearance') {
+//             order.text('d3.stackOrderAscending')
+//             stack.order(d3.stackOrderAscending)
+//         } else if (order.text() == 'd3.stackOrderAscending') {
+//             order.text('d3.stackOrderDescending')
+//             stack.order(d3.stackOrderDescending)
+//         } else if (order.text() == 'd3.stackOrderDescending') {
+//             order.text('d3.stackOrderInsideOut')
+//             stack.order(d3.stackOrderInsideOut)
+//         } else if (order.text() == 'd3.stackOrderInsideOut') {
+//             order.text('d3.stackOrderNone')
+//             stack.order(d3.stackOrderNone)
+//         } else if (order.text() == 'd3.stackOrderNone') {
+//             order.text('d3.stackOrderReverse')
+//             stack.order(d3.stackOrderReverse)
+//         } else if (order.text() == 'd3.stackOrderReverse') {
+//             order.text('d3.stackOrderAppearance')
+//             stack.order(d3.stackOrderAppearance)
+//         }
+//         stackedData = stack(data)
+//         minV = d3.min(stackedData, d=>d3.min(d, d=>d3.min(d))) 
+//         maxV = d3.max(stackedData, d=>d3.max(d, d=>d3.max(d)))
+//         scaleX = d3.scaleLinear([0, 9], [0, 600])
+//         scaleY = d3.scaleLinear()
+//             .domain([minV, maxV]).range([350, 50])
+//         svg.selectAll('path').data(stackedData)
+//             .transition().duration(2000)
+//             .attr('d', area)
+//     })
+
+// let offset = svg.append('text').attrs({
+//     'x': 20,
+//     'y': 375,
+//     'alignment-baseline': 'middle'
+// }).text('offset')
+// .on('click', function(){
+//     if (offset.text() == 'offset') {
+//         offset.text('d3.stackOffsetExpand')
+//         stack.offset(d3.stackOffsetExpand)
+//     } else if (offset.text() == 'd3.stackOffsetExpand') {
+//         offset.text('d3.stackOffsetDiverging')
+//         stack.offset(d3.stackOffsetDiverging)
+//     } else if (offset.text() == 'd3.stackOffsetDiverging') {
+//         offset.text('d3.stackOffsetNone')
+//         stack.offset(d3.stackOffsetNone)
+//     } else if (offset.text() == 'd3.stackOffsetNone') {
+//         offset.text('d3.stackOffsetSilhouette')
+//         stack.offset(d3.stackOffsetSilhouette)
+//     } else if (offset.text() == 'd3.stackOffsetSilhouette') {
+//         offset.text('d3.stackOffsetWiggle')
+//         stack.offset(d3.stackOffsetWiggle)
+//     } else if (offset.text() == 'd3.stackOffsetWiggle') {
+//         offset.text('d3.stackOffsetExpand')
+//         stack.offset(d3.stackOffsetExpand)
+//     }
+//     stackedData = stack(data)
+//     minV = d3.min(stackedData, d=>d3.min(d, d=>d3.min(d))) 
+//     maxV = d3.max(stackedData, d=>d3.max(d, d=>d3.max(d)))
+//     scaleX = d3.scaleLinear([0, 9], [0, 600])
+//     scaleY = d3.scaleLinear()
+//         .domain([minV, maxV]).range([350, 50])
+//     svg.selectAll('path').data(stackedData)
+//         .transition().duration(2000)
+//         .attr('d', area)
+// })

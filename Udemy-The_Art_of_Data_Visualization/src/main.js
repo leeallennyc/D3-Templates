@@ -1,45 +1,123 @@
 import * as d3 from 'd3'
 import { attrs } from 'd3-selection-multi'
 
-let dim = {
-    'width': 600,
-    'height': 400
+let dim = { 
+    'width': 720, 
+    'height': 500
 }
 
 let svg = d3.select('body').append('svg')
     .style('background', 'floralwhite')
     .attrs(dim)
 
-let data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140]
-let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-            'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+d3.select('body').append('div').append('button').text('Change data')
+.on('click', changeData)
 
-svg.selectAll('line').data([50, 550]).enter().append('line').attrs({
-    'x1': (d)=>d,
-    'x2': (d)=>d,
-    'y1': 50,
-    'y2': 350,
-    'stroke': 'red'
+let plotArea = {
+    'x': 50,
+    'y': 50,
+    'width': 620,
+    'height': 400
+}
+svg.append('clipPath').attr('id', 'plot-area')
+    .append('rect').attrs(plotArea)
+
+svg.append('g').attrs({
+    'transform': 'translate(0, 450)',
+    'id': 'x-grid',
+    'class': 'grid'
+})
+svg.append('g').attrs({
+    'transform': 'translate(50, 0)',
+    'id': 'y-grid',
+    'class': 'grid'
+})
+svg.append('g').attrs({
+    'transform': 'translate(0, 450)',
+    'id': 'x-axis'
+})
+svg.append('g').attrs({
+    'transform': 'translate(50, 0)',
+    'id': 'y-axis'
 })
 
-let scaleY = d3.scaleLinear([0, d3.max(data)], [350, 50])
+let container = svg.append('g').attr('clip-path', 'url(#plot-area)')
 
-let scaleX = d3.scalePoint()
-    .domain(months)
-    .range([50, 550])
-    .padding(0)
-
-svg.selectAll('circle').data(months).enter().append('circle').attrs({
-    'cx': (d)=>scaleX(d),
-    'cy': (d,i)=> scaleY(data[i]),
-    'r': 5,
-    'fill': 'orange'
+svg.append('polyline').attrs({
+    'points': '50,50 670,50 670,450',
+    'stroke': 'black',
+    'fill': 'none'
 })
 
-console.log(scaleX.bandwidth())
 
+let dataset
+changeData()
 
+function changeData(){
+    // dataset size random number from range 60 to 100
+    let size = Math.round(Math.random() * 40) + 60
+    // generate the data - an array of objects
+    dataset = []
+    for (let i = 0; i < size; i++) {
+        dataset.push({
+            weight: Math.round(Math.random() * 50) + 55,
+            height: Math.round(Math.random() * 30) + 160,
+        })
+    }
+    console.log(dataset)
+    draw()
+}
 
+function draw() {
+    let t = d3.transition().duration(2000)
+    // Scales
+    let scaleX = d3.scaleLinear(d3.extent(dataset, (d)=>d.weight), [50, 670])
+    let scaleY = d3.scaleLinear(d3.extent(dataset, (d)=>d.height), [450, 50])
+    let scaleS = d3.scaleSqrt()
+        .domain(d3.extent(dataset, (d)=>d.weight / d.height))
+        .range([8, 20])
+    let scaleC = d3.scaleDiverging(d3.interpolateOrRd)
+        .domain([
+            d3.max(dataset, (d)=>d.weight / d.height),
+            d3.median(dataset, (d)=>d.weight / d.height),
+            d3.min(dataset, (d)=>d.weight / d.height)
+        ])
+
+    let gridX = d3.axisBottom(scaleX)
+    gridX.tickFormat('').tickSize(-400).tickSizeOuter(0)
+    d3.select('#x-grid').transition(t).call(gridX)
+    let gridY = d3.axisLeft(scaleY)
+    gridY.tickFormat('').tickSize(-620).tickSizeOuter(0)
+    d3.select('#y-grid').transition(t).call(gridY)
+    d3.selectAll('.grid').selectAll('line').attrs({
+        'stroke': 'lightgray',
+        'stroke-dasharray': '5 3'
+    })
+
+    let axisX = d3.axisBottom(scaleX)
+    d3.select('#x-axis').transition(t).call(axisX)
+    let axisY = d3.axisLeft(scaleY)
+    d3.select('#y-axis').transition(t).call(axisY)
+    
+   
+
+    // bubbles
+    let cAtts = {
+        'cx': (d)=>scaleX(d.weight),
+        'cy': (d)=>scaleY(d.height),
+        'r': (d)=>scaleS(d.weight / d.height),
+        'fill': (d)=>scaleC(d.weight / d.height),
+        'stroke': 'gray', 'opacity': 0.75
+    }
+    let circles = container.selectAll('circle').data(dataset)
+    circles.enter().append('circle').attrs({
+        'cx': (d)=>scaleX(d.weight),
+        'cy': (d)=>scaleY(d.height),
+        'r': 0 })
+        .transition(t).attrs(cAtts)
+    circles.transition(t).attrs(cAtts)
+    circles.exit().transition(t).attr('r', 0).remove()
+}
 
 
 
@@ -709,3 +787,223 @@ console.log(scaleX.bandwidth())
 // })
 
 // console.log(scaleX.bandwidth())
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 18 Divergent Scale Example
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 400,
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// // Domain needs to be 3 values!!!
+// let scale = d3.scaleDiverging([0, 200, 600],d3.interpolateOrRd)
+
+// svg.selectAll('line').data(d3.range(0,600,5)).enter().append('line').attrs({
+//     'x1': (d)=>d,
+//     'x2': (d)=>d,
+//     'y1': 0,
+//     'y2': 220,
+//     'stroke': (d)=>scale(d)
+// })
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 19 Scale Time
+///////////////////////////////////////////////////////////////////////////
+
+
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let ts = d3.scaleTime()
+//     .domain([new Date(2021, 0, 1),new Date(2021, 11, 31)])
+//     .range([50, 350])
+
+// let dFormat = d3.timeFormat('%Y.%m')
+
+// let dates = ts.ticks(d3.timeMonth.every(1))
+
+// // console.log(dates);
+
+// svg.selectAll('text').data(dates).enter().append('text').attrs({
+//     'x': 50,
+//     'y': (d)=>ts(d)
+// }).text((d)=>dFormat(d))
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 20 Time Axis
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let data = [10, 20, 40, 50, 60, 70, 80, 90, 100, 100, 130, 140]
+// let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+//             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+
+// let scaleX = d3.scalePoint(months, [50, 550])
+// let scaleY = d3.scaleLinear(d3.extent(data), [350, 50])
+
+// let axisX = d3.axisBottom(scaleX)
+// let axisY = d3.axisLeft(scaleY)
+
+// svg.append('g').attr('transform', 'translate(0, 350)').call(axisX).style('color', 'red')
+// svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color', 'red')
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 21 Axis, Grid, Labels, Ticks!!!
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let data = [10, 20, 40, 50, 60, 70, 80, 90, 100, 100, 130, 140]
+// let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+//             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+
+// let scaleX = d3.scalePoint(months, [50, 550])
+// let scaleY = d3.scaleLinear(d3.extent(data), [350, 50])
+
+// let axisX = d3.axisBottom(scaleX)
+// let axisY = d3.axisLeft(scaleY)
+// let gridY = d3.axisLeft(scaleY)
+// axisY.ticks(8)
+// // axisY.tickValues([d3.min(data), 20, 50, 75, d3.max(data)])
+// axisY.tickFormat((d)=>'$'+ d)
+// axisX.tickSize(8)
+
+// gridY.tickSize(-505).tickFormat('').tickSizeOuter(0)
+    
+
+// svg.append('g').attr('transform', 'translate(50, 0)').call(gridY)
+//     .selectAll('line')
+//                 .attrs({
+//                     'stroke': 'lightgrey',
+//                     'stroke-dasharray': '5 3',
+//                     'opacity': '0.5'
+//                 })
+
+// svg.append('g').attr('transform', 'translate(0, 350)').call(axisX).style('color', 'red')
+//     .selectAll('text')
+//         .attrs({
+//             'font-size': 12,
+//             'transform': 'rotate(-40)',
+//             'dy': '0.5em',
+//             'dx': '-1.6em'
+
+//         })
+// svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color', 'red')
+
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 22 Transitions and Animation, Loops
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600, 
+//     'height': 300
+// }
+
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let redball = svg.append('circle').attrs({
+//     'cx': 100,
+//     'cy': 200,
+//     'r': 30,
+//     'fill': 'orange'
+// }).on('click', function(){
+//     animate()
+// })
+
+// // Animate from large to small and change color
+// function animate(){
+//     let t = d3.transition()
+//         .duration(1000)
+//         // .ease(d3.easeElastic)
+//     redball.transition(t)
+//         .attrs({
+//             'cx': 450,
+//             'fill': 'blue',
+//             'r': '15'
+//         })
+//         .transition(t)
+//         .attrs({
+//             'cx': 100,
+//             'fill': 'orange',
+//             'r': '30'
+//         })
+//         // Animate by looping
+//         .on('end', animate)
+// }
+
+///////////////////////////////////////////////////////////////////////////
+// Lesson 23 Ease Out Transitions
+///////////////////////////////////////////////////////////////////////////
+
+// let dim = {
+//     'width': 600, 
+//     'height': 300
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let redball = svg.append('circle').attrs({
+//     'cx': 100,
+//     'cy': 200,
+//     'r': 30,
+//     'fill': 'orange'
+// }).on('click', function(){
+//     animate()
+// })
+
+// // Animate from large to small and change color
+// function animate(){
+//     let t = d3.transition()
+//         .duration(1000)
+//         .ease(d3.easeExpOut)
+//     redball.transition(t)
+//         .attrs({
+//             'cx': 450,
+//             'fill': 'blue',
+//             'r': '15'
+//         })
+//         .transition(t)
+//         .attrs({
+//             'cx': 100,
+//             'fill': 'orange',
+//             'r': '30'
+//         })
+//         // Animate by looping
+//         .on('end', animate)
+// }
+
+// console.log(d3.easeExpIn(0.5))

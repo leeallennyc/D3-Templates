@@ -2,6 +2,30 @@ import * as d3 from 'd3'
 import { attrs } from 'd3-selection-multi'
 
 
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
+
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
+
+// let d = [11, 15, 23, 8, 10]
+
+// let cAttrs = {
+//     'cx':(d) => d + (dim.width/2),
+//     'cy': 200,
+//     'r': (d, i) => 5 * (i+5),
+//     'fill': 'gray',
+//     'opacity': .2
+// }
+
+// svg.selectAll('circles').data(d).enter().append('circle')
+//     .attrs(cAttrs)
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Lesson 1  Element Selection and Binding
@@ -40,8 +64,6 @@ import { attrs } from 'd3-selection-multi'
 ///////////////////////////////////////////////////////////////////////////
 // Lesson 3 Atts through d3-selection-multi
 ///////////////////////////////////////////////////////////////////////////
-
-// import { attrs } from 'd3-selection-multi'
 
 // let dim = {
 //     'width': 600,
@@ -624,7 +646,7 @@ import { attrs } from 'd3-selection-multi'
 //     'fill': 'orange'
 // })
 
-// Scale Ordinal            
+// // Scale Ordinal            
 // let scale = d3.scaleOrdinal()
 //     .domain(months)
 //     .range(data)
@@ -642,9 +664,9 @@ import { attrs } from 'd3-selection-multi'
 //     .style('background', 'floralwhite')
 //     .attrs(dim)
 
-// let data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140]
-// let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-//             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+// // let data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140]
+// // let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+// //             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
 // svg.selectAll('line').data([50, 550]).enter().append('line').attrs({
 //     'x1': (d)=>d,
@@ -763,7 +785,7 @@ import { attrs } from 'd3-selection-multi'
 //     .style('background', 'floralwhite')
 //     .attrs(dim)
 
-// let data = [10, 20, 40, 50, 60, 70, 80, 90, 100, 100, 130, 140]
+// let data = [100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500]
 // let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
 //             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
@@ -963,7 +985,7 @@ function changeData(){
     draw()
 }
 
-function draw() {
+function draw(){
     let t = d3.transition().duration(2000)
     // Scales
     let scaleX = d3.scaleLinear(d3.extent(dataset, (d)=>d.weight), [50, 670])
@@ -971,7 +993,7 @@ function draw() {
     let scaleS = d3.scaleSqrt()
         .domain(d3.extent(dataset, (d)=>d.weight / d.height))
         .range([8, 20])
-    let scaleC = d3.scaleDiverging(d3.interpolateOrRd)
+    let scaleC = d3.scaleDiverging(d3.interpolateMagma)
         .domain([
             d3.max(dataset, (d)=>d.weight / d.height),
             d3.median(dataset, (d)=>d.weight / d.height),
@@ -1083,8 +1105,6 @@ function draw() {
 // Lesson 26 Radial Clusters and Transitions
 ///////////////////////////////////////////////////////////////////////////
 
-// import * as d3 from 'd3'
-// import { attrs } from 'd3-selection-multi'
 // let ix = 0
 // let dim = { 'width': 600, 'height': 400 }
 // let svg = d3.select('body').append('svg')
@@ -1285,10 +1305,6 @@ function draw() {
 ///////////////////////////////////////////////////////////////////////////
 // Lesson 28 Area Generator
 ///////////////////////////////////////////////////////////////////////////
-
-
-// import * as d3 from 'd3'
-// import { attrs } from 'd3-selection-multi'
 
 // let dim = { 'width': 600, 'height': 400 }
 // let svg = d3.select('body').append('svg')

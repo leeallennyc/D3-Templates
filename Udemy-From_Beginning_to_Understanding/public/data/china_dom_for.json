@@ -1,0 +1,64 @@
+{
+    "chinaDomFor": [
+        {
+        "year": "2010",
+        "domestic": 79767,
+        "foreign": 55343,
+        "total": 135110
+      },
+      {
+        "year": "2011",
+        "domestic": 112347,
+        "foreign": 59766,
+        "total": 172113
+      },
+      {
+        "year": "2012",
+        "domestic": 143847,
+        "foreign": 73258,
+        "total": 217105
+      },
+      {
+        "year": "2013",
+        "domestic": 143535,
+        "foreign": 64153,
+        "total": 207688
+      },
+      {
+        "year": "2014",
+        "domestic": 162680,
+        "foreign": 70548,
+        "total": 233228
+      },
+      {
+        "year": "2015",
+        "domestic": 263436,
+        "foreign": 95880,
+        "total": 359316
+      },
+      {
+        "year": "2016",
+        "domestic": 302136,
+        "foreign": 102072,
+        "total": 404208
+      },
+      {
+        "year": "2017",
+        "domestic": 3269702,
+        "foreign": 93174,
+        "total": 420144
+      },
+      {
+        "year": "2018",
+        "domestic": 345959,
+        "foreign": 86188,
+        "total": 432147
+      },
+      {
+        "year": "2019",
+        "domestic": 360919,
+        "foreign": 91885,
+        "total": 452804
+      }
+    ]
+  }

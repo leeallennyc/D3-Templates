@@ -1,84 +1,84 @@
 {
-    "utilitiesByYear": [
+    "grantsByYear": [
         {
         "year": "2000",
-        "number": 295926
+        "number": 157494
       },
       {
         "year": "2001",
-        "number": 326508
+        "number": 166035
       },
       {
         "year": "2002",
-        "number": 334445
+        "number": 167331
       },
       {
         "year": "2003",
-        "number": 342441
+        "number": 169023
       },
       {
         "year": "2004",
-        "number": 356943
+        "number": 164290
       },
       {
         "year": "2005",
-        "number": 390733
+        "number": 143806
       },
       {
         "year": "2006",
-        "number": 425967
+        "number": 173772
       },
       {
         "year": "2007",
-        "number": 456154
+        "number": 157282
       },
       {
         "year": "2008",
-        "number": 456321
+        "number": 157772
       },
       {
         "year": "2009",
-        "number": 456106
+        "number": 167349
       },
       {
         "year": "2010",
-        "number": 490226
+        "number": 219614
       },
       {
         "year": "2011",
-        "number": 503582
+        "number": 224505
       },
       {
         "year": "2012",
-        "number": 542815
+        "number": 253155
       },
       {
         "year": "2013",
-        "number": 571612
+        "number": 277835
       },
       {
         "year": "2014",
-        "number": 578802
+        "number": 300677
       },
       {
         "year": "2015",
-        "number": 589410
+        "number": 298408
       },
       {
         "year": "2016",
-        "number": 605571
+        "number": 303049
       },
       {
         "year": "2017",
-        "number": 606956
+        "number": 318828
       },
       {
         "year": "2018",
-        "number": 597141
+        "number": 307759
       },
       {
         "year": "2019",
-        "number": 621453
+        "number": 354430
       }
     ]
   }

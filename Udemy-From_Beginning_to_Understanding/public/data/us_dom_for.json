@@ -1,0 +1,64 @@
+{
+    "usDomFor": [
+        {
+        "year": "2010",
+        "domestic": 107792,
+        "foreign": 111822,
+        "total": 219614
+      },
+      {
+        "year": "2011",
+        "domestic": 108626,
+        "foreign": 115879,
+        "total": 224505
+      },
+      {
+        "year": "2012",
+        "domestic": 121026,
+        "foreign": 132129,
+        "total": 253155
+      },
+      {
+        "year": "2013",
+        "domestic": 133593,
+        "foreign": 144242,
+        "total": 277835
+      },
+      {
+        "year": "2014",
+        "domestic": 144621,
+        "foreign": 156056,
+        "total": 300677
+      },
+      {
+        "year": "2015",
+        "domestic": 140969,
+        "foreign": 157438,
+        "total": 298407
+      },
+      {
+        "year": "2016",
+        "domestic": 143723,
+        "foreign": 159326,
+        "total": 303049
+      },
+      {
+        "year": "2017",
+        "domestic": 150949,
+        "foreign": 167880,
+        "total": 318829
+      },
+      {
+        "year": "2018",
+        "domestic": 144413,
+        "foreign": 163346,
+        "total": 307759
+      },
+      {
+        "year": "2019",
+        "domestic": 167115,
+        "foreign": 187315,
+        "total": 354430
+      }
+    ]
+  }

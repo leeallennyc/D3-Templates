@@ -1,0 +1,50 @@
+body {
+    padding: 0;
+    margin:0;
+}
+
+.axis line, .axis path {
+    stroke-width: .5px;
+    stroke:floralwhite;
+}
+.axis text {
+    font-family: Futura, Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.4em;
+    fill: floralwhite;
+}
+
+.title {
+    font-family: Futura, Verdana, Geneva, Tahoma, sans-serif;
+    font-size: .8em;
+    fill: floralwhite;
+}
+
+.title2 {
+    font-family: Futura, Verdana, Geneva, Tahoma, sans-serif;
+    font-size: .8em;
+    fill: floralwhite;
+}
+
+.applications {
+    width: 20px;
+    height: 10px;
+    fill: orange;
+}
+
+.grants {
+    width: 20px;
+    height: 10px;
+    fill: blue;
+}
+
+.applicationsText {
+    font-family: Futura, Verdana, Geneva, Tahoma, sans-serif;
+    font-size: .8em;
+    fill: orange;
+}
+
+.grantsText {
+    font-family: Futura, Verdana, Geneva, Tahoma, sans-serif;
+    font-size: .8em;
+    fill: blue;
+}

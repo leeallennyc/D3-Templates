@@ -11,7 +11,7 @@ const pages =  [
     { location: '/area-chart', file: 'area-chart'},
     { location: '/time-chart', file: 'time-chart'},
     { location: '/patents', file: 'patents'},
-    { location: '/planets', file: 'planets'},
+    { location: '/utilities', file: 'utilities'},
     { location: '/scores', file: 'scores'},
     { location: '/user-updating-bar-chart', file: 'user-updating-bar-chart'}
 ]

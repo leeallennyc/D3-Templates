@@ -38,7 +38,7 @@ const formatData = data => {
 
 const colorScale = d3.scaleOrdinal()
     .domain(stores)
-    .range(['red', 'orange', 'yellow', 'green', 'blue'])
+    .range(['orange', 'orange', 'yellow', 'green', 'blue'])
 const xScale = d3.scaleBand().rangeRound([0, width]).padding(0.1)
 const yScale = d3.scaleLinear().range([height, 0])
 const xAxis = d3.axisBottom(xScale)
@@ -51,7 +51,7 @@ svg.select('.y.axis')
     .duration(1000)
     .call(yAxis)
 
-const bar = svg.selectAll('.bar').data(data)
+const bar = svg.selectAll('.bar').data(data);
 bar.enter().append('rect')
 .merge(bar)
 .attr('class', 'bar')
@@ -64,8 +64,10 @@ bar.enter().append('rect')
 .attr('height', d => height - yScale(d.profit))
 .style('fill', d => colorScale(d.store))
 
+
+
 bar.exit().remove()
-}
+
 
 const select = d3.select('body')
     .append('select').attr('class', 'select')

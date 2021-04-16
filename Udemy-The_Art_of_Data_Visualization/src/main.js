@@ -776,51 +776,51 @@ import { attrs } from 'd3-selection-multi'
 // Lesson 21 Axis, Grid, Labels, Ticks!!!
 ///////////////////////////////////////////////////////////////////////////
 
-// let dim = {
-//     'width': 600,
-//     'height': 400
-// }
+let dim = {
+    'width': 600,
+    'height': 400
+}
 
-// let svg = d3.select('body').append('svg')
-//     .style('background', 'floralwhite')
-//     .attrs(dim)
+let svg = d3.select('body').append('svg')
+    .style('background', 'floralwhite')
+    .attrs(dim)
 
-// let data = [100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500]
-// let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-//             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+let data = [100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500]
+let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+            'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-// let scaleX = d3.scalePoint(months, [50, 550])
-// let scaleY = d3.scaleLinear(d3.extent(data), [350, 50])
+let scaleX = d3.scalePoint(months, [50, 550])
+let scaleY = d3.scaleLinear(d3.extent(data), [350, 50])
 
-// let axisX = d3.axisBottom(scaleX)
-// let axisY = d3.axisLeft(scaleY)
-// let gridY = d3.axisLeft(scaleY)
-// axisY.ticks(8)
-// // axisY.tickValues([d3.min(data), 20, 50, 75, d3.max(data)])
-// axisY.tickFormat((d)=>'$'+ d)
-// axisX.tickSize(8)
+let axisX = d3.axisBottom(scaleX)
+let axisY = d3.axisLeft(scaleY)
+let gridY = d3.axisLeft(scaleY)
+axisY.ticks(8)
+// axisY.tickValues([d3.min(data), 20, 50, 75, d3.max(data)])
+axisY.tickFormat((d)=>'$'+ d)
+axisX.tickSize(8)
 
-// gridY.tickSize(-505).tickFormat('').tickSizeOuter(0)
+gridY.tickSize(-505).tickFormat('').tickSizeOuter(0)
     
 
-// svg.append('g').attr('transform', 'translate(50, 0)').call(gridY)
-//     .selectAll('line')
-//                 .attrs({
-//                     'stroke': 'lightgrey',
-//                     'stroke-dasharray': '5 3',
-//                     'opacity': '0.5'
-//                 })
+svg.append('g').attr('transform', 'translate(50, 0)').call(gridY)
+    .selectAll('line')
+                .attrs({
+                    'stroke': 'lightgrey',
+                    'stroke-dasharray': '5 3',
+                    'opacity': '0.5'
+                })
 
-// svg.append('g').attr('transform', 'translate(0, 350)').call(axisX).style('color', 'red')
-//     .selectAll('text')
-//         .attrs({
-//             'font-size': 12,
-//             'transform': 'rotate(-40)',
-//             'dy': '0.5em',
-//             'dx': '-1.6em'
+svg.append('g').attr('transform', 'translate(0, 350)').call(axisX).style('color', 'red')
+    .selectAll('text')
+        .attrs({
+            'font-size': 12,
+            'transform': 'rotate(-40)',
+            'dy': '0.5em',
+            'dx': '-1.6em'
 
-//         })
-// svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color', 'red')
+        })
+svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color', 'red')
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -918,122 +918,122 @@ import { attrs } from 'd3-selection-multi'
 ///////////////////////////////////////////////////////////////////////////
 
 
-let dim = { 
-    'width': 720, 
-    'height': 500
-}
+// let dim = { 
+//     'width': 720, 
+//     'height': 500
+// }
 
-let svg = d3.select('body').append('svg')
-    .style('background', 'floralwhite')
-    .attrs(dim)
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
 
-d3.select('body').append('div').append('button').text('Change data')
-.on('click', changeData)
+// d3.select('body').append('div').append('button').text('Change data')
+// .on('click', changeData)
 
-let plotArea = {
-    'x': 50,
-    'y': 50,
-    'width': 620,
-    'height': 400
-}
-svg.append('clipPath').attr('id', 'plot-area')
-    .append('rect').attrs(plotArea)
+// let plotArea = {
+//     'x': 50,
+//     'y': 50,
+//     'width': 620,
+//     'height': 400
+// }
+// svg.append('clipPath').attr('id', 'plot-area')
+//     .append('rect').attrs(plotArea)
 
-svg.append('g').attrs({
-    'transform': 'translate(0, 450)',
-    'id': 'x-grid',
-    'class': 'grid'
-})
-svg.append('g').attrs({
-    'transform': 'translate(50, 0)',
-    'id': 'y-grid',
-    'class': 'grid'
-})
-svg.append('g').attrs({
-    'transform': 'translate(0, 450)',
-    'id': 'x-axis'
-})
-svg.append('g').attrs({
-    'transform': 'translate(50, 0)',
-    'id': 'y-axis'
-})
+// svg.append('g').attrs({
+//     'transform': 'translate(0, 450)',
+//     'id': 'x-grid',
+//     'class': 'grid'
+// })
+// svg.append('g').attrs({
+//     'transform': 'translate(50, 0)',
+//     'id': 'y-grid',
+//     'class': 'grid'
+// })
+// svg.append('g').attrs({
+//     'transform': 'translate(0, 450)',
+//     'id': 'x-axis'
+// })
+// svg.append('g').attrs({
+//     'transform': 'translate(50, 0)',
+//     'id': 'y-axis'
+// })
 
-let container = svg.append('g').attr('clip-path', 'url(#plot-area)')
+// let container = svg.append('g').attr('clip-path', 'url(#plot-area)')
 
-svg.append('polyline').attrs({
-    'points': '50,50 670,50 670,450',
-    'stroke': 'black',
-    'fill': 'none'
-})
+// svg.append('polyline').attrs({
+//     'points': '50,50 670,50 670,450',
+//     'stroke': 'black',
+//     'fill': 'none'
+// })
 
 
-let dataset
-changeData()
+// let dataset
+// changeData()
 
-function changeData(){
-    // dataset size random number from range 60 to 100
-    let size = Math.round(Math.random() * 40) + 60
-    // generate the data - an array of objects
-    dataset = []
-    for (let i = 0; i < size; i++) {
-        dataset.push({
-            weight: Math.round(Math.random() * 50) + 55,
-            height: Math.round(Math.random() * 30) + 160,
-        })
-    }
-    console.log(dataset)
-    draw()
-}
+// function changeData(){
+//     // dataset size random number from range 60 to 100
+//     let size = Math.round(Math.random() * 40) + 60
+//     // generate the data - an array of objects
+//     dataset = []
+//     for (let i = 0; i < size; i++) {
+//         dataset.push({
+//             weight: Math.round(Math.random() * 50) + 55,
+//             height: Math.round(Math.random() * 30) + 160,
+//         })
+//     }
+//     console.log(dataset)
+//     draw()
+// }
 
-function draw(){
-    let t = d3.transition().duration(2000)
-    // Scales
-    let scaleX = d3.scaleLinear(d3.extent(dataset, (d)=>d.weight), [50, 670])
-    let scaleY = d3.scaleLinear(d3.extent(dataset, (d)=>d.height), [450, 50])
-    let scaleS = d3.scaleSqrt()
-        .domain(d3.extent(dataset, (d)=>d.weight / d.height))
-        .range([8, 20])
-    let scaleC = d3.scaleDiverging(d3.interpolateMagma)
-        .domain([
-            d3.max(dataset, (d)=>d.weight / d.height),
-            d3.median(dataset, (d)=>d.weight / d.height),
-            d3.min(dataset, (d)=>d.weight / d.height)
-        ])
+// function draw(){
+//     let t = d3.transition().duration(2000)
+//     // Scales
+//     let scaleX = d3.scaleLinear(d3.extent(dataset, (d)=>d.weight), [50, 670])
+//     let scaleY = d3.scaleLinear(d3.extent(dataset, (d)=>d.height), [450, 50])
+//     let scaleS = d3.scaleSqrt()
+//         .domain(d3.extent(dataset, (d)=>d.weight / d.height))
+//         .range([8, 20])
+//     let scaleC = d3.scaleDiverging(d3.interpolateMagma)
+//         .domain([
+//             d3.max(dataset, (d)=>d.weight / d.height),
+//             d3.median(dataset, (d)=>d.weight / d.height),
+//             d3.min(dataset, (d)=>d.weight / d.height)
+//         ])
 
-    let gridX = d3.axisBottom(scaleX)
-    gridX.tickFormat('').tickSize(-400).tickSizeOuter(0)
-    d3.select('#x-grid').transition(t).call(gridX)
-    let gridY = d3.axisLeft(scaleY)
-    gridY.tickFormat('').tickSize(-620).tickSizeOuter(0)
-    d3.select('#y-grid').transition(t).call(gridY)
-    d3.selectAll('.grid').selectAll('line').attrs({
-        'stroke': 'lightgray',
-        'stroke-dasharray': '4 3'
-    })
+//     let gridX = d3.axisBottom(scaleX)
+//     gridX.tickFormat('').tickSize(-400).tickSizeOuter(0)
+//     d3.select('#x-grid').transition(t).call(gridX)
+//     let gridY = d3.axisLeft(scaleY)
+//     gridY.tickFormat('').tickSize(-620).tickSizeOuter(0)
+//     d3.select('#y-grid').transition(t).call(gridY)
+//     d3.selectAll('.grid').selectAll('line').attrs({
+//         'stroke': 'lightgray',
+//         'stroke-dasharray': '4 3'
+//     })
 
-    let axisX = d3.axisBottom(scaleX)
-    d3.select('#x-axis').transition(t).call(axisX)
-    let axisY = d3.axisLeft(scaleY)
-    d3.select('#y-axis').transition(t).call(axisY)
+//     let axisX = d3.axisBottom(scaleX)
+//     d3.select('#x-axis').transition(t).call(axisX)
+//     let axisY = d3.axisLeft(scaleY)
+//     d3.select('#y-axis').transition(t).call(axisY)
     
 
-    // bubbles
-    let cAtts = {
-        'cx': (d)=>scaleX(d.weight),
-        'cy': (d)=>scaleY(d.height),
-        'r': (d)=>scaleS(d.weight / d.height),
-        'fill': (d)=>scaleC(d.weight / d.height),
-        'stroke': 'gray', 'opacity': 0.75
-    }
-    let circles = container.selectAll('circle').data(dataset)
-    circles.enter().append('circle').attrs({
-        'cx': (d)=>scaleX(d.weight),
-        'cy': (d)=>scaleY(d.height),
-        'r': 0 })
-        .transition(t).attrs(cAtts)
-    circles.transition(t).attrs(cAtts)
-    circles.exit().transition(t).attr('r', 0).remove()
-}
+//     // bubbles
+//     let cAtts = {
+//         'cx': (d)=>scaleX(d.weight),
+//         'cy': (d)=>scaleY(d.height),
+//         'r': (d)=>scaleS(d.weight / d.height),
+//         'fill': (d)=>scaleC(d.weight / d.height),
+//         'stroke': 'gray', 'opacity': 0.75
+//     }
+//     let circles = container.selectAll('circle').data(dataset)
+//     circles.enter().append('circle').attrs({
+//         'cx': (d)=>scaleX(d.weight),
+//         'cy': (d)=>scaleY(d.height),
+//         'r': 0 })
+//         .transition(t).attrs(cAtts)
+//     circles.transition(t).attrs(cAtts)
+//     circles.exit().transition(t).attr('r', 0).remove()
+// }
 
 ///////////////////////////////////////////////////////////////////////////
 // Lesson 25 Force Simulation with Nodes

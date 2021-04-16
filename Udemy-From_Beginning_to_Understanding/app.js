@@ -4,7 +4,7 @@ const express = require('express')
 const expressHbs = require('express-handlebars')
 const path = require('path')
 const routes = require('./routes/index')
-const port = 8080
+const port = 8888
 
 const app = express()
 app.engine('.hbs', expressHbs({ defaultLayout: 'layout', extname: '.hbs'}))

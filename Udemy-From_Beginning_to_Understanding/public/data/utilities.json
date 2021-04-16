@@ -1,0 +1,84 @@
+{
+    "planetDiameters": [
+        {
+        "year": "2000",
+        "diameter": 295926
+      },
+      {
+        "year": "2001",
+        "diameter": 326508
+      },
+      {
+        "year": "2002",
+        "diameter": 334445
+      },
+      {
+        "year": "2003",
+        "diameter": 342441
+      },
+      {
+        "year": "2004",
+        "diameter": 356943
+      },
+      {
+        "year": "2005",
+        "diameter": 390733
+      },
+      {
+        "year": "2006",
+        "diameter": 425967
+      },
+      {
+        "year": "2007",
+        "diameter": 456154
+      },
+      {
+        "year": "2008",
+        "diameter": 456321
+      },
+      {
+        "year": "2009",
+        "diameter": 456106
+      },
+      {
+        "year": "2010",
+        "diameter": 490226
+      },
+      {
+        "year": "2011",
+        "diameter": 503582
+      },
+      {
+        "year": "2012",
+        "diameter": 542815
+      },
+      {
+        "year": "2013",
+        "diameter": 571612
+      },
+      {
+        "year": "2014",
+        "diameter": 578802
+      },
+      {
+        "year": "2015",
+        "diameter": 589410
+      },
+      {
+        "year": "2016",
+        "diameter": 605571
+      },
+      {
+        "year": "2017",
+        "diameter": 606956
+      },
+      {
+        "year": "2018",
+        "diameter": 597141
+      },
+      {
+        "year": "2019",
+        "diameter": 621453
+      }
+    ]
+  }

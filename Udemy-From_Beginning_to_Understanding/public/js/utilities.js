@@ -1,5 +1,5 @@
-d3.json('/data/planets.json').then(data => {
-    const planets = data.planetDiameters
+d3.json('/data/utilities.json').then(data => {
+    const years = data.planetDiameters
     
     const div = d3.select('body')
     const margin = { top: 200, right: 200, bottom: 200, left: 200 }
@@ -13,12 +13,12 @@ d3.json('/data/planets.json').then(data => {
             .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
     const xScale = d3.scaleBand()
-        .domain(planets.map(d => d.planet))
+        .domain(years.map(d => d.year))
         .rangeRound([0, width])
         .padding(0.1)
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(planets.map(d => d.diameter))])
+        .domain([0, d3.max(years.map(d => d.diameter))])
         .rangeRound([height, 0])
 
     const xAxis = svg.append('g')
@@ -31,6 +31,7 @@ d3.json('/data/planets.json').then(data => {
         .attr('dy', '0.75em')
         .style('text-anchor', 'middle')
         .style('fill', 'gray')
+        .style('stroke', '.5px')
         .text('Countries')
 
     const yAxis = svg.append('g')
@@ -39,49 +40,50 @@ d3.json('/data/planets.json').then(data => {
         .append('text')
         .style('text-anchor', 'end')
         .style('fill', 'gray')
+        .style('stroke', '.5px')
         .attr('y', 6)
         .attr('dy', '0.75em')
         .attr('transform', 'rotate(-90)')
         .text('Patents per Country')
 
     const bars = svg.selectAll('.bar')
-        .data(planets)
+        .data(years)
         .enter().append('rect')
         .attr('class', 'bar')
-        .attr('x', d => xScale(d.planet))
+        .attr('x', d => xScale(d.year))
         .attr('y', height)
         .attr('width', xScale.bandwidth())
         .on('mouseover', function (d, i){
             d3.select(this)
-            .transition().duration(100)
+            .transition().duration(50)
             .style('fill-opacity', 0.5)
         })
         .on('mouseout', function (d, i){
             d3.select(this)
-            .transition().duration(100)
+            .transition().duration(50)
             .style('fill-opacity', 0.8)
         })
-        .style('fill', 'red')
+        .style('fill', 'orange')
         .style('fill-opacity', 0.8)
         .style('stroke', 'floralwhite')
         .style('stroke-width', 1) 
-        .transition().duration(1500).delay((d,i) => i * 200)
+        .transition().duration(500).delay((d,i) => i * 50)
         .attr('y', d => yScale(d.diameter))
         .attr('height', d => height - yScale(d.diameter))
 
     const barTitle = svg.selectAll('.title')
-        .data(planets)
+        .data(years)
         .enter().append('text')
         .attr('class', 'title')
-        .attr('x', d => xScale(d.planet))
+        .attr('x', d => xScale(d.year))
         .attr('dx', xScale.bandwidth() /2)
         .attr('y', d => yScale(d.diameter))
         .attr('dy', '-0.6em')
-        .style('fill', 'red')
+        .style('fill', 'orange')
         .style('text-anchor', 'middle')
         .style('opacity', 0)
         .text(d => d.diameter)
-        .transition().duration(5000).delay((d, i) => i * 200)
+        .transition().duration(50).delay((d, i) => i * 50)
         .style('opacity', 1) 
 
 })

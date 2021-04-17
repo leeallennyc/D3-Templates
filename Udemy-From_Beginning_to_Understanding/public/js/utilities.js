@@ -47,7 +47,7 @@ d3.json('/data/utilities.json').then(data => {
         .attr('y', 50)
         .attr('dy', '0.75em')
         .style('text-anchor', 'start')
-        .text('APPLICATIONS')
+        .text('PATENT APPLICATIONS')
 
     const grants = svg.append('g')
         .append('rect')
@@ -64,7 +64,7 @@ d3.json('/data/utilities.json').then(data => {
         .attr('y', 75)
         .attr('dy', '0.75em')
         .style('text-anchor', 'start')
-        .text('GRANTS')
+        .text('GRANTED PATENTS')
         
     
     const yAxis = svg.append('g')

@@ -776,51 +776,51 @@ import { attrs } from 'd3-selection-multi'
 // Lesson 21 Axis, Grid, Labels, Ticks!!!
 ///////////////////////////////////////////////////////////////////////////
 
-let dim = {
-    'width': 600,
-    'height': 400
-}
+// let dim = {
+//     'width': 600,
+//     'height': 400
+// }
 
-let svg = d3.select('body').append('svg')
-    .style('background', 'floralwhite')
-    .attrs(dim)
+// let svg = d3.select('body').append('svg')
+//     .style('background', 'floralwhite')
+//     .attrs(dim)
 
-let data = [100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500]
-let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-            'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+// let data = [100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500]
+// let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+//             'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-let scaleX = d3.scalePoint(months, [50, 550])
-let scaleY = d3.scaleLinear(d3.extent(data), [350, 50])
+// let scaleX = d3.scalePoint(months, [50, 550])
+// let scaleY = d3.scaleLinear(d3.extent(data), [350, 50])
 
-let axisX = d3.axisBottom(scaleX)
-let axisY = d3.axisLeft(scaleY)
-let gridY = d3.axisLeft(scaleY)
-axisY.ticks(8)
-// axisY.tickValues([d3.min(data), 20, 50, 75, d3.max(data)])
-axisY.tickFormat((d)=>'$'+ d)
-axisX.tickSize(8)
+// let axisX = d3.axisBottom(scaleX)
+// let axisY = d3.axisLeft(scaleY)
+// let gridY = d3.axisLeft(scaleY)
+// axisY.ticks(8)
+// // axisY.tickValues([d3.min(data), 20, 50, 75, d3.max(data)])
+// axisY.tickFormat((d)=>'$'+ d)
+// axisX.tickSize(8)
 
-gridY.tickSize(-505).tickFormat('').tickSizeOuter(0)
+// gridY.tickSize(-505).tickFormat('').tickSizeOuter(0)
     
 
-svg.append('g').attr('transform', 'translate(50, 0)').call(gridY)
-    .selectAll('line')
-                .attrs({
-                    'stroke': 'lightgrey',
-                    'stroke-dasharray': '5 3',
-                    'opacity': '0.5'
-                })
+// svg.append('g').attr('transform', 'translate(50, 0)').call(gridY)
+//     .selectAll('line')
+//                 .attrs({
+//                     'stroke': 'lightgrey',
+//                     'stroke-dasharray': '5 3',
+//                     'opacity': '0.5'
+//                 })
 
-svg.append('g').attr('transform', 'translate(0, 350)').call(axisX).style('color', 'red')
-    .selectAll('text')
-        .attrs({
-            'font-size': 12,
-            'transform': 'rotate(-40)',
-            'dy': '0.5em',
-            'dx': '-1.6em'
+// svg.append('g').attr('transform', 'translate(0, 350)').call(axisX).style('color', 'red')
+//     .selectAll('text')
+//         .attrs({
+//             'font-size': 12,
+//             'transform': 'rotate(-40)',
+//             'dy': '0.5em',
+//             'dx': '-1.6em'
 
-        })
-svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color', 'red')
+//         })
+// svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color', 'red')
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -919,7 +919,7 @@ svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color',
 
 
 // let dim = { 
-//     'width': 720, 
+//     'width': 750, 
 //     'height': 500
 // }
 
@@ -1534,135 +1534,135 @@ svg.append('g').attr('transform', 'translate(50, 0)').call(axisY).style('color',
 ///////////////////////////////////////////////////////////////////////////
 
 
-// let dim = { 'width': 770, 'height': 400 }
-// let svg = d3.select('body').append('svg')
-//     // .style('background', 'lightgrey')
-//     .attrs(dim)
+let dim = { 'width': 770, 'height': 400 }
+let svg = d3.select('body').append('svg')
+    // .style('background', 'lightgrey')
+    .attrs(dim)
 
-// d3.json('data.json').then(d=>main(d))
+d3.json('data.json').then(d=>main(d))
 
-// let menu = d3.select('body').append('select')
+let menu = d3.select('body').append('select')
 
-// let axisContainer = svg.append('g').attrs({
-//     'id': 'axis',
-//     'transform': 'translate(0, 360)'
-// })
+let axisContainer = svg.append('g').attrs({
+    'id': 'axis',
+    'transform': 'translate(0, 360)'
+})
 
-// let pathsContainer = svg.append('g')
-// let legendContainer = svg.append('g')
+let pathsContainer = svg.append('g')
+let legendContainer = svg.append('g')
 
-// function main(dataset) {
-//     let options = menu.selectAll('options').data(Object.keys(dataset))
-//     options.enter().append('option').attr('value', d=>d).text(d=>d)
-//     options.exit().remove()
-//     menu.on('change', function(){
-//         draw(dataset[menu.select('option:checked').text()])
-//     })
-//     draw(dataset[menu.select('option:checked').text()])
-// }
+function main(dataset) {
+    let options = menu.selectAll('options').data(Object.keys(dataset))
+    options.enter().append('option').attr('value', d=>d).text(d=>d)
+    options.exit().remove()
+    menu.on('change', function(){
+        draw(dataset[menu.select('option:checked').text()])
+    })
+    draw(dataset[menu.select('option:checked').text()])
+}
 
-// function draw(data) {
-//     console.log(data)
-//     let t = d3.transition().duration(1000)
-//     let stack = d3.stack().keys(Object.keys(data[0]))
-//     stack.order(d3.stackOrderReverse)
-//     stack.offset(d3.stackOffsetSilhouette)
-//     let stackData = stack(data)
-//     console.log(stackData)
-//     let minV = d3.min(stackData, d=>d3.min(d, d=>d3.min(d)))
-//     let maxV = d3.max(stackData, d=>d3.max(d, d=>d3.max(d)))
+function draw(data) {
+    console.log(data)
+    let t = d3.transition().duration(1000)
+    let stack = d3.stack().keys(Object.keys(data[0]))
+    stack.order(d3.stackOrderReverse)
+    stack.offset(d3.stackOffsetSilhouette)
+    let stackData = stack(data)
+    console.log(stackData)
+    let minV = d3.min(stackData, d=>d3.min(d, d=>d3.min(d)))
+    let maxV = d3.max(stackData, d=>d3.max(d, d=>d3.max(d)))
 
-//     let scaleX = d3.scaleLinear([0, data.length - 1], [100, 750])
-//     let scaleY = d3.scaleLinear([minV, maxV], [300, 50])
-//     let colors = d3.schemeOrRd[stackData.length]
+    let scaleX = d3.scaleLinear([0, data.length - 1], [100, 750])
+    let scaleY = d3.scaleLinear([minV, maxV], [300, 50])
+    let colors = d3.schemeOrRd[stackData.length]
 
-//     let axis = d3.axisBottom(scaleX)
-//     axis.ticks(data.length)
-//     axis.tickFormat(d=>`CW${d + 1}`)
-//     axis.tickSize(-330)
+    let axis = d3.axisBottom(scaleX)
+    axis.ticks(data.length)
+    axis.tickFormat(d=>`CW${d + 1}`)
+    axis.tickSize(-330)
 
-//     axisContainer.call(axis)
-//         .call(d=>d.select('.domain').remove())
-//         .selectAll('line').attrs({
-//             'stroke': 'gray',
-//             'stroke-dasharray': '6 3'
-//         })
+    axisContainer.call(axis)
+        .call(d=>d.select('.domain').remove())
+        .selectAll('line').attrs({
+            'stroke': 'gray',
+            'stroke-dasharray': '6 3'
+        })
 
-//     let area = d3.area()
-//         .x((d, i)=>scaleX(i))
-//         .y0(d=>scaleY(d[0]))
-//         .y1(d=>scaleY(d[1]))
-//         .curve(d3.curveCatmullRom)
+    let area = d3.area()
+        .x((d, i)=>scaleX(i))
+        .y0(d=>scaleY(d[0]))
+        .y1(d=>scaleY(d[1]))
+        .curve(d3.curveCatmullRom)
 
-//     let paths = pathsContainer.selectAll('path').data(stackData)
-//     let attributes = {
-//         'd': area,
-//         'stroke': 'gray',
-//         'fill': (d, i)=>colors[i],
-//         'fill-opacity': 0.75,
-//         'id': (d, i)=>Object.keys(data[0])[i]
-//     }
-//     paths.enter().append('path').attrs(attributes)
-//         .on('mousemove', updateLabels)
-//         .on('mouseleave', resetLabels)
-//     paths.transition(t).attrs(attributes)
-//     paths.on('mousemove', updateLabels)
-//         .on('mouseleave', resetLabels)
-//     paths.exit().remove()
+    let paths = pathsContainer.selectAll('path').data(stackData)
+    let attributes = {
+        'd': area,
+        'stroke': 'gray',
+        'fill': (d, i)=>colors[i],
+        'fill-opacity': 0.75,
+        'id': (d, i)=>Object.keys(data[0])[i]
+    }
+    paths.enter().append('path').attrs(attributes)
+        .on('mousemove', updateLabels)
+        .on('mouseleave', resetLabels)
+    paths.transition(t).attrs(attributes)
+    paths.on('mousemove', updateLabels)
+        .on('mouseleave', resetLabels)
+    paths.exit().remove()
 
-//     let markers = svg.selectAll('circle')
-//         .data(d3.range(stackData.length + 1))
-//     markers.enter().append('circle').attrs({
-//         'cx': -10, 'cy': -10, 'r': 3, 'fill': 'darkred'
-//     })
+    let markers = svg.selectAll('circle')
+        .data(d3.range(stackData.length + 1))
+    markers.enter().append('circle').attrs({
+        'cx': -10, 'cy': -10, 'r': 3, 'fill': 'darkred'
+    })
 
-//     function updateLabels() {
-//         let ix = Math.round(scaleX.invert(d3.event.x))
-//         let txt = Object.keys(data[ix])
-//         let markerNodes = d3.selectAll('circle').nodes()
-//         for (let i = 0; i < txt.length; i++) {
-//             d3.select('#label' + txt[i])
-//                 .text(txt[i] + ': ' + data[ix][txt[i]])
-//             // markers update
-//             d3.select(markerNodes[i]).attrs({
-//                 'cx': scaleX(ix),
-//                 'cy': scaleY(stackData[i][ix][0])
-//             })
-//         }
-//         d3.select(markerNodes[txt.length]).attrs({
-//             'cx': scaleX(ix),
-//             'cy': scaleY(stackData[0][ix][1])
-//         })
-//     }
+    function updateLabels() {
+        let ix = Math.round(scaleX.invert(d3.event.x))
+        let txt = Object.keys(data[ix])
+        let markerNodes = d3.selectAll('circle').nodes()
+        for (let i = 0; i < txt.length; i++) {
+            d3.select('#label' + txt[i])
+                .text(txt[i] + ': ' + data[ix][txt[i]])
+            // markers update
+            d3.select(markerNodes[i]).attrs({
+                'cx': scaleX(ix),
+                'cy': scaleY(stackData[i][ix][0])
+            })
+        }
+        d3.select(markerNodes[txt.length]).attrs({
+            'cx': scaleX(ix),
+            'cy': scaleY(stackData[0][ix][1])
+        })
+    }
 
-//     function resetLabels() {
-//         let txt = Object.keys(data[0])
-//         for (let i = 0; i < txt.length; i++) {
-//             d3.select('#label' + txt[i]).text(txt[i])
-//         }
-//         d3.selectAll('circle').attrs({ 'cx': -10, 'cy': -10 })
-//     }
+    function resetLabels() {
+        let txt = Object.keys(data[0])
+        for (let i = 0; i < txt.length; i++) {
+            d3.select('#label' + txt[i]).text(txt[i])
+        }
+        d3.selectAll('circle').attrs({ 'cx': -10, 'cy': -10 })
+    }
 
-//     let rects = legendContainer.selectAll('rect').data(Object.keys(data[0]))
-//     attributes = {
-//         'stroke': 'gray',
-//         'fill': (d, i)=>colors[i],
-//         'fill-opacity': 0.75,
-//         'width': 12,
-//         'height': 12,
-//         'x': 10
-//     }
-//     rects.enter().append('rect').attrs(attributes)
-//         .attr('y', (d, i)=>100 + i * 22)
-//     rects.exit().remove()
+    let rects = legendContainer.selectAll('rect').data(Object.keys(data[0]))
+    attributes = {
+        'stroke': 'gray',
+        'fill': (d, i)=>colors[i],
+        'fill-opacity': 0.75,
+        'width': 12,
+        'height': 12,
+        'x': 10
+    }
+    rects.enter().append('rect').attrs(attributes)
+        .attr('y', (d, i)=>100 + i * 22)
+    rects.exit().remove()
 
-//     let legend = legendContainer.selectAll('text').data(Object.keys(data[0]))
-//     attributes = {
-//         'fill': 'gray', 'alignment-baseline': 'hanging',
-//         'x': 26
-//     }
-//     legend.enter().append('text').attrs(attributes)
-//         .attr('y', (d, i)=>100 + i * 22 ).text(d=>d)
-//         .attr('id', (d)=>'label' + d)
-//     legend.text(d=>d)
-// }
+    let legend = legendContainer.selectAll('text').data(Object.keys(data[0]))
+    attributes = {
+        'fill': 'gray', 'alignment-baseline': 'hanging',
+        'x': 26
+    }
+    legend.enter().append('text').attrs(attributes)
+        .attr('y', (d, i)=>100 + i * 22 ).text(d=>d)
+        .attr('id', (d)=>'label' + d)
+    legend.text(d=>d)
+}

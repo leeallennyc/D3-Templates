@@ -1,0 +1,304 @@
+{
+    "mlSumsByYear": [
+        {
+            "year": "2016",
+            "month": "Jan 2016",
+            "number": 8
+        },
+        {
+            "year": "2016",
+            "month": "Feb 16",
+            "number": 7
+        },
+        {
+            "year": "2016",
+            "month": "Mar 16",
+            "number": 20
+        },
+        {
+            "year": "2016",
+            "month": "Apr 16",
+            "number": 16
+        },
+        {
+            "year": "2016",
+            "month": "May 16",
+            "number": 15
+        },
+        {
+            "year": "2016",
+            "month": "Jun 16",
+            "number": 7
+        },
+        {
+            "year": "2016",
+            "month": "Jul 16",
+            "number": 7
+        },
+        {
+            "year": "2016",
+            "month": "Aug 16",
+            "number": 11
+        },
+        {
+            "year": "2016",
+            "month": "Sept 16",
+            "number": 10
+        },
+        {
+            "year": "2016",
+            "month": "Oct 16",
+            "number": 6
+        },
+        {
+            "year": "2016",
+            "month": "Nov 16",
+            "number": 18
+        },
+        {
+            "year": "2016",
+            "month": "Dec 16",
+            "number": 10
+        },
+        {
+            "year": "2017",
+            "month": "Jan 2017",
+            "number": 15
+        },
+        {
+            "year": "2017",
+            "month": "Feb 17",
+            "number": 9
+        },
+        {
+            "year": "2017",
+            "month": "Mar 17",
+            "number": 11
+        },
+        {
+            "year": "2017",
+            "month": "Apr 17",
+            "number": 16
+        },
+        {
+            "year": "2017",
+            "month": "May 17",
+            "number": 14
+        },
+        {
+            "year": "2017",
+            "month": "Jun 17",
+            "number": 21
+        },
+        {
+            "year": "2017",
+            "month": "Jul 17",
+            "number": 15
+        },
+        {
+            "year": "2017",
+            "month": "Aug 17",
+            "number": 22
+        },
+        {
+            "year": "2017",
+            "month": "Sep 17",
+            "number": 15
+        },
+        {
+            "year": "2017",
+            "month": "Oct 17",
+            "number": 23
+        },
+        {
+            "year": "2017",
+            "month": "Nov 17",
+            "number": 9
+        },
+        {
+            "year": "2017",
+            "month": "Dec 17",
+            "number": 8
+        },
+        {
+            "year": "2018",
+            "month": "Jan 2018",
+            "number": 15
+        },
+        {
+            "year": "2018",
+            "month": "Feb 18",
+            "number": 12
+        },
+        {
+            "year": "2018",
+            "month": "Mar 18",
+            "number": 13
+        },
+        {
+            "year": "2018",
+            "month": "Apr 18",
+            "number": 12
+        },
+        {
+            "year": "2018",
+            "month": "May 18",
+            "number": 21
+        },
+        {
+            "year": "2018",
+            "month": "Jun 18",
+            "number": 20
+        },
+        {
+            "year": "2018",
+            "month": "Jul 18",
+            "number": 23
+        },
+        {
+            "year": "2018",
+            "month": "Aug 18",
+            "number": 35
+        },
+        {
+            "year": "2018",
+            "month": "Sept 18",
+            "number": 21
+        },
+        {
+            "year": "2018",
+            "month": "Oct 18",
+            "number": 35
+        },
+        {
+            "year": "2018",
+            "month": "Nov 18",
+            "number": 28
+        },
+        {
+            "year": "2018",
+            "month": "Dec 18",
+            "number": 24
+        },
+        {
+            "year": "2019",
+            "month": "Jan 2019",
+            "number": 36
+        },
+        {
+            "year": "2019",
+            "month": "Feb 19",
+            "number": 29
+        },
+        {
+            "year": "2019",
+            "month": "Mar 19",
+            "number": 31
+        },
+        {
+            "year": "2019",
+            "month": "Apr 19",
+            "number": 54
+        },
+        {
+            "year": "2019",
+            "month": "May 19",
+            "number": 42
+        },
+        {
+            "year": "2019",
+            "month": "Jun 19",
+            "number": 52
+        },
+        {
+            "year": "2019",
+            "month": "Jul 19",
+            "number": 50
+        },
+        {
+            "year": "2019",
+            "month": "Aug 19",
+            "number": 59
+        },
+        {
+            "year": "2019",
+            "month": "Sep 19",
+            "number": 69
+        },
+        {
+            "year": "2019",
+            "month": "Oct 19",
+            "number": 91
+        },
+        {
+            "year": "2019",
+            "month": "Nov 19",
+            "number": 74
+        },
+        {
+            "year": "2019",
+            "month": "Dec 19",
+            "number": 65
+        },
+        {
+            "year": "2020",
+            "month": "Jan 2020",
+            "number": 59
+        },
+        {
+            "year": "2020",
+            "month": "Feb 20",
+            "number": 63
+        },
+        {
+            "year": "2020",
+            "month": "Mar 20",
+            "number": 98
+        },
+        {
+            "year": "2020",
+            "month": "Apr 20",
+            "number": 85
+        },
+        {
+            "year": "2020",
+            "month": "May 20",
+            "number": 76
+        },
+        {
+            "year": "2020",
+            "month": "Jun 20",
+            "number": 107
+        },
+        {
+            "year": "2020",
+            "month": "Jul 20",
+            "number": 82
+        },
+        {
+            "year": "2020",
+            "month": "Aug 20",
+            "number": 97
+        },
+        {
+            "year": "2020",
+            "month": "Sep 20",
+            "number": 116
+        },
+        {
+            "year": "2020",
+            "month": "Oct 20",
+            "number": 122
+        },
+        {
+            "year": "2020",
+            "month": "Nov 20",
+            "number": 108
+        },
+        {
+            "year": "2020",
+            "month": "Dec 20",
+            "number": 112
+        }
+    ]
+}

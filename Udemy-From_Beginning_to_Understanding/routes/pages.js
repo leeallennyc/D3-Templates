@@ -12,6 +12,7 @@ const pages =  [
     { location: '/time-chart', file: 'time-chart'},
     { location: '/patents', file: 'patents'},
     { location: '/utilities', file: 'utilities'},
+    { location: '/ml-sums-by-year', file: 'ml-sums-by-year'},
     { location: '/scores', file: 'scores'},
     { location: '/user-updating-bar-chart', file: 'user-updating-bar-chart'}
 ]
